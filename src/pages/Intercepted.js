@@ -150,9 +150,9 @@ class Intercepted extends React.Component {
                             </div>
                             
                             {this.state.timeLeft <= 0 &&
-                                <div>Well done! You earned&nbsp;
-                                {duration(this.state.exerciseDuration).humanize()}
-                                &nbsp;of browsing time.</div>
+                                <div>Well done! You earned{/*&nbsp;
+                                {duration(this.state.exerciseDuration * 5).humanize()}
+                                &nbsp; of */} browsing time.</div>
                             }
                         </Col>
                         <Col span={6}>

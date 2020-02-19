@@ -168,6 +168,9 @@ class ExerciseOptions extends React.Component {
       </Row>
       <Divider />
       <Row>
+        <Col span={24} style={{ textAlign: 'right'}}>
+          Minutes | Seconds
+        </Col>
         <Col span={6}>
           Exercise duration
         </Col>

@@ -108,6 +108,7 @@ export const unblockWebsite = (hostname) => {
     }).then(() => message.success(`Unblocked ${hostname}`));
 };
 
+//seems to be the plus and minus of the extension on the blocked pages. Currently disabled.
 export const setTimeout = async (url, timeout) => {
     let res = await getFromStorage('blockedUrls');
     let { blockedUrls } = res; // cant be empty, cause were blocked.

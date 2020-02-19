@@ -25,7 +25,7 @@ const columns = [
       <code>{regex}</code>
     )
   },
-  {
+  /*{
     dataIndex: 'timeout',
     render: (timeout, site) => {
       
@@ -68,7 +68,7 @@ const columns = [
         </div>
       );
     }
-  },
+  },*/
   {
     dataIndex: 'hostname',
     render: hostname => (

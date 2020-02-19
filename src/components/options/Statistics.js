@@ -35,7 +35,7 @@ class Statistics extends React.Component {
       let timeSpentLearning = res.timeSpentLearning || {};
       let timeSpentLearningData = Object.keys(timeSpentLearning).map(key => ({
         name: key,
-        value: Math.round(timeSpentLearning[key] / 1000 / 60) // minutes
+        value: Math.floor(timeSpentLearning[key] / 1000 / 60) // seconds
       }));
 
       this.setState({ interceptsData, timeSpentLearningData });
