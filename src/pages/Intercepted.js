@@ -1,6 +1,6 @@
 import React from 'react';
 import { Progress, message, Icon, Row, Col, Button, Empty } from 'antd';
-import { getFromStorage, setInStorage } from '../util/storage';
+import { getFromStorage, setInStorage, setFirebaseData } from '../util/storage';
 import {
     defaultExerciseSite,
     defaultExerciseSites,
@@ -39,7 +39,7 @@ class Intercepted extends React.Component {
             if (timeLeft <= 0) clearInterval(this.state.timer)
 
             // update time spent learning on website
-            getFromStorage('timeSpentLearning').then(res => {
+            getFromStorage('timeSpentLearning').then(async res => {
                 let timeSpentLearning = res.timeSpentLearning || {};
                 let site = this.getExerciseSite();
 
@@ -48,7 +48,8 @@ class Intercepted extends React.Component {
                 let newExerciseTimeSpent = timeSpentLearning[site.name]
                                                 + timePassed || timePassed;
                 timeSpentLearning[site.name] = newExerciseTimeSpent;
-                return setInStorage({ timeSpentLearning });
+                await setFirebaseData({ timeSpentLearning });
+                return setInStorage({ tigetExerciseSitemeSpentLearning });
             });
 
             this.setState({ timeLeft, timestamp });
@@ -75,7 +76,8 @@ class Intercepted extends React.Component {
             
             let count = intercepts[parsed.hostname] + 1 || 1;
             intercepts[parsed.hostname] = count;
-
+            
+            setFirebaseData({ intercepts });
             return setInStorage({ intercepts });
         });
     }
@@ -150,9 +152,9 @@ class Intercepted extends React.Component {
                             </div>
                             
                             {this.state.timeLeft <= 0 &&
-                                <div>Well done! You earned{/*&nbsp;
-                                {duration(this.state.exerciseDuration * 5).humanize()}
-                                &nbsp; of */} browsing time.</div>
+                                <div>Well done! You earned &nbsp;
+                                {duration(this.state.exerciseDuration*10).humanize()}
+                                &nbsp; of browsing time.</div>
                             }
                         </Col>
                         <Col span={6}>

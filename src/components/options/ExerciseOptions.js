@@ -1,5 +1,5 @@
 import React from 'react';
-import { addStorageListener, getFromStorage, setInStorage } from '../../util/storage';
+import { addStorageListener, getFromStorage, setInStorage, setFirebaseData } from '../../util/storage';
 import { defaultExerciseSite, defaultExerciseSites, defaultexerciseDuration, s2 } from '../../util/constants';
 import { addExerciseSite, parseUrls, removeExerciseSite } from '../../util/block-site';
 import { Row, Col, Input, Divider, TimePicker, Icon, Select, Button, Modal } from 'antd';
@@ -43,12 +43,18 @@ class ExerciseOptions extends React.Component {
     setInStorage({ currentExerciseSite }).then(() => {
       this.setState({ currentExerciseSite });
     });
+    setFirebaseData({ currentExerciseSite }).then(() => {
+      this.setState({ currentExerciseSite });
+    })
   }
 
   // time is a moment object
   setExerciseDuration(time) {
     const exerciseDuration = time.valueOf();
     setInStorage({ exerciseDuration }).then(() => {
+      this.setState({ exerciseDuration });
+    });
+    setFirebaseData({ exerciseDuration }).then(() => {
       this.setState({ exerciseDuration });
     });
   }

@@ -11,7 +11,8 @@ import {
 import {
   getFromStorage,
   setInStorage,
-  addStorageListener
+  addStorageListener,
+  setFirebaseData
 } from '../util/storage';
 
 class Popup extends React.Component {
@@ -38,9 +39,10 @@ class Popup extends React.Component {
     });
   }
 
-  onSwitchChange(enabled) {
+   onSwitchChange(enabled) {
     this.setState({ enabled });
     setInStorage({ enabled });
+    setFirebaseData({ enabled });
   }
 
   openOptionsPage() {
@@ -60,7 +62,9 @@ class Popup extends React.Component {
             <Switch
               loading={this.state.enabled === undefined}
               checked={this.state.enabled}
-              onChange={checked => this.onSwitchChange(checked)} />
+              onChange={checked => this.onSwitchChange(checked)} 
+              checkedChildren="On"
+              unCheckedChildren="Off"/>
           </div>
           <p>Distraction Shield</p>
           <div>
@@ -73,7 +77,7 @@ class Popup extends React.Component {
               !this.state.currentBlocked && blockCurrentWebsite();
               this.state.currentBlocked && unBlockCurrentWebsite();
             }}>
-            {this.state.currentBlocked ? 'Unblock' : 'Block'}
+            {this.state.currentBlocked ? 'Unblock current page' : 'Block current page'}
           </Button>
         </p>
         <p>

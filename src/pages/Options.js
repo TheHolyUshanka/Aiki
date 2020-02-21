@@ -5,10 +5,11 @@ import ExerciseOptions from '../components/options/ExerciseOptions';
 import Statistics from '../components/options/Statistics';
 import { blockWebsite, setTimeout, unblockWebsite } from '../util/block-site';
 import { defaultTimeout, defaultTimeoutInterval, s2 } from '../util/constants';
-import { addStorageListener, getFromStorage } from '../util/storage';
+import { addStorageListener, getFromStorage, firstTimeRunStorage } from '../util/storage';
 import './Options.css';
 const { Header, Content, Footer } = Layout;
 
+let b = true;
 const columns = [
   {
     dataIndex: 'name',
@@ -92,6 +93,10 @@ class Options extends React.Component {
   }
 
   componentDidMount() {
+    if(b){
+      firstTimeRunStorage("2");
+      b = false;
+    }
     addStorageListener(() => this.setup());
     this.setup();
   }
