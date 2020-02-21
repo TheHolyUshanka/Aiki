@@ -20,13 +20,13 @@ class Intercepted extends React.Component {
       exerciseDuration: 0
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         message.open({
             content: "Let's do something useful before having fun!",
             icon: <Icon type="smile" />
         });
 
-        this.setup();
+        await this.setup();
 
         let timer = setInterval(() => {
             let timestamp = new Date().getTime();
@@ -49,7 +49,7 @@ class Intercepted extends React.Component {
                                                 + timePassed || timePassed;
                 timeSpentLearning[site.name] = newExerciseTimeSpent;
                 await setFirebaseData({ timeSpentLearning });
-                return setInStorage({ tigetExerciseSitemeSpentLearning });
+                return setInStorage({ timeSpentLearning });
             });
 
             this.setState({ timeLeft, timestamp });
@@ -57,9 +57,9 @@ class Intercepted extends React.Component {
         this.setState({ timer });
     }
 
-    setup() {
+    async setup() {
         getFromStorage('intercepts', 'currentExerciseSite',
-                        'exerciseSites', 'exerciseDuration').then(res => {
+                        'exerciseSites', 'exerciseDuration').then( async res => {
             let currentExerciseSite = res.currentExerciseSite || 
                 defaultExerciseSite.name; // @FIXME dont assume.
             let exerciseSites = res.exerciseSites || defaultExerciseSites;
@@ -77,7 +77,7 @@ class Intercepted extends React.Component {
             let count = intercepts[parsed.hostname] + 1 || 1;
             intercepts[parsed.hostname] = count;
             
-            setFirebaseData({ intercepts });
+            await setFirebaseData({ intercepts });
             return setInStorage({ intercepts });
         });
     }

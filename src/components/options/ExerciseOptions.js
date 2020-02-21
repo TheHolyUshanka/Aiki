@@ -39,22 +39,22 @@ class ExerciseOptions extends React.Component {
     });
   }
 
-  setCurrentExerciseSite(currentExerciseSite) {
+  async setCurrentExerciseSite(currentExerciseSite) {
     setInStorage({ currentExerciseSite }).then(() => {
       this.setState({ currentExerciseSite });
     });
-    setFirebaseData({ currentExerciseSite }).then(() => {
+    await setFirebaseData({ currentExerciseSite }).then(() => {
       this.setState({ currentExerciseSite });
     })
   }
 
   // time is a moment object
-  setExerciseDuration(time) {
+  async setExerciseDuration(time) {
     const exerciseDuration = time.valueOf();
     setInStorage({ exerciseDuration }).then(() => {
       this.setState({ exerciseDuration });
     });
-    setFirebaseData({ exerciseDuration }).then(() => {
+    await setFirebaseData({ exerciseDuration }).then(() => {
       this.setState({ exerciseDuration });
     });
   }

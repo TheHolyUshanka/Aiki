@@ -9,7 +9,7 @@ import { addStorageListener, getFromStorage, firstTimeRunStorage } from '../util
 import './Options.css';
 const { Header, Content, Footer } = Layout;
 
-let b = true;
+let b = false;
 const columns = [
   {
     dataIndex: 'name',
@@ -26,7 +26,7 @@ const columns = [
       <code>{regex}</code>
     )
   },
-  /*{
+  {
     dataIndex: 'timeout',
     render: (timeout, site) => {
       
@@ -69,7 +69,7 @@ const columns = [
         </div>
       );
     }
-  },*/
+  },
   {
     dataIndex: 'hostname',
     render: hostname => (

@@ -102,10 +102,10 @@ export const removeExerciseSite = async name => {
 }
 
 export const unblockWebsite = (hostname) => {
-    getWebsites().then(oldBlockedUrls => {
+    getWebsites().then(async oldBlockedUrls => {
         let blockedUrls = oldBlockedUrls.filter(blockedUrl =>
             blockedUrl.hostname !== hostname);
-        setFirebaseData({ blockedUrls });
+        await setFirebaseData({ blockedUrls });
         return setInStorage({ blockedUrls });
     }).then(() => message.success(`Unblocked ${hostname}`));
 };

@@ -39,10 +39,10 @@ class Popup extends React.Component {
     });
   }
 
-   onSwitchChange(enabled) {
+  async onSwitchChange(enabled) {
     this.setState({ enabled });
     setInStorage({ enabled });
-    setFirebaseData({ enabled });
+    await setFirebaseData({ enabled });
   }
 
   openOptionsPage() {
@@ -62,7 +62,7 @@ class Popup extends React.Component {
             <Switch
               loading={this.state.enabled === undefined}
               checked={this.state.enabled}
-              onChange={checked => this.onSwitchChange(checked)} 
+              onChange={async checked => this.onSwitchChange(checked)} 
               checkedChildren="On"
               unCheckedChildren="Off"/>
           </div>

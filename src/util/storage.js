@@ -3,7 +3,7 @@ import firebase from "./fire";
 /* global chrome */
 let listeners = [];
 let study = "testRun";
-let uId = "";
+let uId = "2";
 
 export function getFromStorage(...keys) {
     return new Promise(resolve => {
@@ -79,6 +79,7 @@ export function firstTimeRunStorage(userId) {
     uId = userId;
     return new Promise(async resolve => {
             await firebase.firestore().collection(study).doc(uId).set({
+                "enabled": ""
             }).catch(console.error);
             resolve();
     });
