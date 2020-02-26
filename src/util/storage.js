@@ -103,5 +103,26 @@ export function firstTimeRunStorage(userId) {
             docs.forEach((doc)=>{
                 console.log(doc.data());
     })
+}
 
-        }*/
+    const data = querySnapshot.docs.map(doc => doc.data());
+                let result = keys.reduce((acc,val) => {
+                    acc[val] = data.acc;
+                    return acc;
+                }, {});
+                console.log(data);
+                resolve(result);
+
+
+    export function getFromFirebase(...keys) {
+    const datas = async resolve =>{
+            await firebase.firestore().collection(study).doc(uId).get().then(querySnapshot => {
+                let result = Object.keys(keys).forEach(key => {
+                    keys[key] = querySnapshot.key;
+                });
+                resolve(result);
+            }).catch(console.error);
+    };
+    return new Promise.all(datas);
+}
+        */

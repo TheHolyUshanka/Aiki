@@ -92,7 +92,7 @@ class Options extends React.Component {
     blockedUrls: []
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     if(b){
       firstTimeRunStorage("2");
       b = false;

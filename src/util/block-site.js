@@ -118,7 +118,7 @@ export const setTimeout = async (url, timeout) => {
         if (blockedUrl.domain === url.domain) {
             // compose a date in the future in milliseconds since epoch,
             // by adding exercise duration milliseconds
-            timeout += timeout * 10;
+            timeout += timeout;
             blockedUrl.timeout = timeout;
         }
         return blockedUrl;

@@ -22,14 +22,14 @@ class ExerciseOptions extends React.Component {
     newExerciseSite: null
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     addStorageListener(() => this.setup());
     this.setup();
   }
 
   setup() {
     getFromStorage('currentExerciseSite', 'exerciseSites', 'exerciseDuration')
-      .then(res => {
+      .then(async res => {
         let currentExerciseSite = res.currentExerciseSite || defaultExerciseSite.name;
         let exerciseSites = res.exerciseSites || defaultExerciseSites;
         let exerciseDuration = res.exerciseDuration || defaultexerciseDuration;

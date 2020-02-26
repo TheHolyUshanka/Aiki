@@ -35,7 +35,7 @@ class Statistics extends React.Component {
       let timeSpentLearning = res.timeSpentLearning || {};
       let timeSpentLearningData = Object.keys(timeSpentLearning).map(key => ({
         name: key,
-        value: Math.floor(timeSpentLearning[key] / 1000 / 60) // seconds
+        value: Math.round(timeSpentLearning[key] / 1000 / 60) // minutes
       }));
 
       this.setState({ interceptsData, timeSpentLearningData });
@@ -50,7 +50,7 @@ class Statistics extends React.Component {
             <Pie dataKey="value" isAnimationActive={false}
                     data={this.state.interceptsData}
                     cx={200} cy={200} outerRadius={80} fill="#8884d8"
-                    label />
+                    label={this.state.interceptsData.name} />
             <Tooltip />
         </PieChart>
         
@@ -68,7 +68,7 @@ class Statistics extends React.Component {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="value" fill="#8884d8" name="Time spent (minutes)" />
+            <Bar dataKey="value" fill="#8884d8" name="Time spent (whole minutes)" />
         </BarChart>
       </>
     )
