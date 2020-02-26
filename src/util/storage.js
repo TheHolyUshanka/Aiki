@@ -1,5 +1,9 @@
+import firebase from "./fire";
+
 /* global chrome */
 let listeners = [];
+let study = "newTestRun";
+let uId = "3";
 
 export function getFromStorage(...keys) {
     return new Promise(resolve => {
@@ -25,9 +29,11 @@ export function getFromStorage(...keys) {
 }
 
 export function setInStorage(items) {
-    return new Promise(resolve => {
+    return new Promise(async resolve => {
         if (!items) return resolve();
 
+        await setFirebaseData(items);
+        
         if (window.chrome && chrome.storage) {
             chrome.storage.sync.set(items, () => {
                 resolve();
@@ -56,3 +62,24 @@ export const addStorageListener = callback => {
         window.addEventListener('storage', callback); // only for external tab
     }
 };
+
+export function setFirebaseData(items) {
+    return new Promise(async resolve => {
+        if(!items) return resolve();
+
+        Object.keys(items).forEach( async key => {
+            await firebase.firestore().collection(study).doc(uId).update({
+                [key]: items[key]
+            });
+        })
+        resolve();
+    })
+}
+
+export function firstTimeRunStorage() {
+    return new Promise(async resolve => {
+            await firebase.firestore().collection(study).doc(uId).set({
+            }).catch(console.error);
+            resolve();
+    });
+}
