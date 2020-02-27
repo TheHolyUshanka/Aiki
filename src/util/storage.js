@@ -3,6 +3,7 @@ import firebase from "./fire";
 /* global chrome */
 let listeners = [];
 let study = "newTestRun";
+let historicalData = "historical"
 let uId = "3";
 
 export function getFromStorage(...keys) {
@@ -28,11 +29,21 @@ export function getFromStorage(...keys) {
     });
 }
 
+export const addStorageListener = callback => {
+    if (window.chrome && chrome.storage) {
+        chrome.storage.onChanged.addListener(callback);
+    } else {
+        listeners.push(callback);
+        window.addEventListener('storage', callback); // only for external tab
+    }
+};
+
 export function setInStorage(items) {
     return new Promise(async resolve => {
         if (!items) return resolve();
 
         await setFirebaseData(items);
+        await setHistoricalFirebase(items);
         
         if (window.chrome && chrome.storage) {
             chrome.storage.sync.set(items, () => {
@@ -54,31 +65,31 @@ export function setInStorage(items) {
     });
 }
 
-export const addStorageListener = callback => {
-    if (window.chrome && chrome.storage) {
-        chrome.storage.onChanged.addListener(callback);
-    } else {
-        listeners.push(callback);
-        window.addEventListener('storage', callback); // only for external tab
-    }
-};
-
-export function setFirebaseData(items) {
-    return new Promise(async resolve => {
-        if(!items) return resolve();
+export async function setFirebaseData(items) {
+        if(!items) return;
 
         Object.keys(items).forEach( async key => {
             await firebase.firestore().collection(study).doc(uId).update({
                 [key]: items[key]
             });
-        })
-        resolve();
-    })
+        });
+}
+
+export async function setHistoricalFirebase(items) {
+    if(!items) return;
+
+    let timeStamp = [new Date().getTime()];
+
+    timeStamp.push(items);
+
+    await firebase.firestore().collection(historicalData).doc(uId).update({
+        [timeStamp[0]]: timeStamp[1]
+    });    
 }
 
 export function firstTimeRunStorage() {
     return new Promise(async resolve => {
-            await firebase.firestore().collection(study).doc(uId).set({
+            await firebase.firestore().collection(historicalData).doc(uId).set({
             }).catch(console.error);
             resolve();
     });
