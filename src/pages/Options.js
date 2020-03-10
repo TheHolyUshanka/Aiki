@@ -13,7 +13,7 @@ const columns = [
   {
     dataIndex: 'name',
     render: (name, site) => (
-      <div span={8}>
+      <div>
         <img alt='favicon' className='site-favicon' src={`${s2}${site.hostname}`} />
         {name}
       </div>
@@ -24,9 +24,7 @@ const columns = [
   {
     dataIndex: 'regex',
     render: regex => (
-      <div span ={8}>
-        <code>{regex}</code>
-      </div>
+      <code>{regex}</code>
     ),
     width: 250,
     ellipsis: true,
@@ -41,6 +39,8 @@ const columns = [
       let timedout = timeout && start.isSameOrBefore(end);
       
       const tillStr = end.format('HH:mm');
+
+      const defTiInt = defaultTimeoutInterval / 60 / 1000;
       
       let now = new Date().valueOf();
       
@@ -51,23 +51,26 @@ const columns = [
             onChange={checked => 
               setTimeout(site, checked ? now + defaultTimeout : now)
             }
-            style={{ marginRight: '5px' }} />
+            style={{ marginRight: '5px' }}
+            title="Toggle timeout of blockade" />
           {timedout === true && (
             <>
               <small style={{ display: 'flex', flexDirection: 'column' }}>
                 <Tag color="blue" style={{
                   borderColor: 'transparent',
                   backgroundColor: 'transparent'
-                }} >
+                }} title = {"Timed out untill " + tillStr } >
                   Untill {tillStr}
                 </Tag>
               </small>
               <Button icon="minus" size="small" type="link"
                 style={{ color: '#8c8c8c' }}
-                onClick={() => setTimeout(site, timeout - defaultTimeoutInterval)} />
+                onClick={() => setTimeout(site, timeout - defaultTimeoutInterval)} 
+                title = {"Minus "+ defTiInt + " minutes to the timeout"}/>
               <Button icon="plus" size="small" type="link"
                 style={{ color: '#8c8c8c' }}
-                onClick={() => setTimeout(site, timeout + defaultTimeoutInterval)} />
+                onClick={() => setTimeout(site, timeout + defaultTimeoutInterval)} 
+                title = {"Add "+ defTiInt + " minutes to the timeout"}/>
             </>
           )}
         </div>
@@ -80,7 +83,7 @@ const columns = [
       <Button type="link" shape="circle" icon="close"
         onClick={() => unblockWebsite(hostname)}
         className="remove-button"
-        title="Delete website"/>
+        title="Unblock website"/>
     ),
     align: 'right'
   },
