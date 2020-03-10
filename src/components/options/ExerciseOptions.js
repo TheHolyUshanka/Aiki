@@ -4,6 +4,7 @@ import { defaultExerciseSite, defaultExerciseSites, defaultexerciseDuration, s2 
 import { addExerciseSite, parseUrls, removeExerciseSite } from '../../util/block-site';
 import { Row, Col, Input, Divider, TimePicker, Icon, Select, Button, Modal } from 'antd';
 import moment from 'moment';
+import './ExerciseOptions.css';
 
 const { Option } = Select;
 
@@ -36,6 +37,7 @@ class ExerciseOptions extends React.Component {
         if (exerciseSites.length === 0) currentExerciseSite = '';
 
       this.setState({ currentExerciseSite, exerciseSites, exerciseDuration });
+      this.setExerciseDuration(defaultexerciseDuration);
     });
   }
 
@@ -173,18 +175,21 @@ class ExerciseOptions extends React.Component {
         <Col span={5}style={{ textAlign: 'center'}}>
           Minutes | Seconds
         </Col>
-        <Col span={6}>
+        <Col span={10}>
           Exercise duration
         </Col>
-        <Col span={18} style={{ textAlign: 'right' }}>
-            <TimePicker 
+        <Col span={14} style={{ textAlign: 'center'}}>
+          <div class="container">
+              00:{defaultexerciseDuration / 1000}
+            </div>
+            {/* <TimePicker 
                 allowClear={false}
                 defaultValue={moment('12:08', 'mm:ss')}
                 value={moment(this.state.exerciseDuration)}
                 secondStep={5}
                 suffixIcon={<Icon type="hourglass" />}
                 format={'mm:ss'}
-                onChange={time => this.setExerciseDuration(time)} />
+                onChange={time => this.setExerciseDuration(time)} />  */}
         </Col>
       </Row>
       </>

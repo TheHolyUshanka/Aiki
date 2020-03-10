@@ -1,0 +1,11 @@
+.container {
+    float:right;
+    min-width: 125px;
+    max-width: 1000px;
+    margin: 0 auto;
+    
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 2px #fff inset,
+                -1px -1px 2px #fff inset;
+    border-radius: 3px/6px;                 
+}
