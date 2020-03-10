@@ -41,7 +41,8 @@ const columns = [
       
       return (
         <div style={{ display: 'flex' }}>
-          <Switch size="small" checked={timedout}
+          <Switch size="small" 
+            checked={timedout}
             onChange={checked => 
               setTimeout(site, checked ? now + defaultTimeout : now)
             }
@@ -131,6 +132,18 @@ class Options extends React.Component {
                       onPressEnter={(e) => this.didAddBlockedWebsite(e)}
                       className='block-button'
                       prefix={<Icon type="stop" style={{ color: 'rgba(0,0,0,.25)' }} />}/>
+                <Col span ={6}>
+                  <h4 className="grid-col-1-title">Page Name</h4>
+                </Col>
+                <Col span ={7}>
+                  <h4 className="grid-col-1-title">Page Url</h4>
+                </Col>
+                <Col span ={7}>
+                  <h4 className="grid-col-1-title">Timeout</h4>
+                </Col>
+                <Col span ={4}>
+                  <h4 className="grid-col-1-title">Unblock page</h4>
+                </Col>
                 <Table columns={columns}
                       dataSource={this.state.blockedUrls.map(
                         (obj, key) => ({ ...obj, key })
