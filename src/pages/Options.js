@@ -13,7 +13,7 @@ const columns = [
   {
     dataIndex: 'name',
     render: (name, site) => (
-      <div>
+      <div span={8}>
         <img alt='favicon' className='site-favicon' src={`${s2}${site.hostname}`} />
         {name}
       </div>
@@ -154,7 +154,7 @@ class Options extends React.Component {
           </Row>
           <Row type="flex" justify="center">
             <Col className="grid-col">
-              <h4 className="grid-col-title">Exercising</h4>
+              <h4 className="grid-col-title">Exercise page and time</h4>
               <Card className="grid-card">
                 <ExerciseOptions />
               </Card>
