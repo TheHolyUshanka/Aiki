@@ -6,8 +6,8 @@
 }
 
 .Popup-header {
-  padding-bottom: 50px;
-  font-size: calc(10px + 2vmin);
+  text-align: left;
+  font-size: calc(10px + 4vmin);
   color: white;
   display: flex;
 }
@@ -17,11 +17,32 @@
   margin: 10px;
 }
 
+.Popup-status{
+  text-align: left;
+  border-top: 1px solid gray;
+  color: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.Popup-current{
+  border-top: 1px solid gray;
+  color: white;
+  padding-top: 10px;
+}
+
+.Popup-settings{
+  text-align: left;
+  border-top: 1px solid gray;
+  color: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
 .Popup-link {
   color: #61dafb;
 }
 
 .Popup-logo {
-  width: 50px;
+  width: 30px;
 }
-

@@ -18,12 +18,18 @@ const columns = [
         {name}
       </div>
     ),
+    width: 125,
+    ellipsis: true, 
   },
   {
     dataIndex: 'regex',
     render: regex => (
-      <code>{regex}</code>
-    )
+      <div span ={8}>
+        <code>{regex}</code>
+      </div>
+    ),
+    width: 250,
+    ellipsis: true,
   },
   {
     dataIndex: 'timeout',
@@ -34,7 +40,6 @@ const columns = [
       
       let timedout = timeout && start.isSameOrBefore(end);
       
-      const timeLeftStr = end.from(start, true);
       const tillStr = end.format('HH:mm');
       
       let now = new Date().valueOf();
@@ -50,12 +55,11 @@ const columns = [
           {timedout === true && (
             <>
               <small style={{ display: 'flex', flexDirection: 'column' }}>
-                For {timeLeftStr}
                 <Tag color="blue" style={{
                   borderColor: 'transparent',
                   backgroundColor: 'transparent'
                 }} >
-                  Till {tillStr}
+                  Untill {tillStr}
                 </Tag>
               </small>
               <Button icon="minus" size="small" type="link"
@@ -132,17 +136,17 @@ class Options extends React.Component {
                       onPressEnter={(e) => this.didAddBlockedWebsite(e)}
                       className='block-button'
                       prefix={<Icon type="stop" style={{ color: 'rgba(0,0,0,.25)' }} />}/>
-                <Col span ={6}>
-                  <h4 className="grid-col-1-title">Page Name</h4>
-                </Col>
                 <Col span ={7}>
-                  <h4 className="grid-col-1-title">Page Url</h4>
+                  <h4>Page Name</h4>
                 </Col>
-                <Col span ={7}>
-                  <h4 className="grid-col-1-title">Timeout</h4>
+                <Col span ={8}>
+                  <h4>Page Url</h4>
+                </Col>
+                <Col span ={5}>
+                  <h4>Timeout</h4>
                 </Col>
                 <Col span ={4}>
-                  <h4 className="grid-col-1-title">Unblock page</h4>
+                  <h4>Unblock page</h4>
                 </Col>
                 <Table columns={columns}
                       dataSource={this.state.blockedUrls.map(
