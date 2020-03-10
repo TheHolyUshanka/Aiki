@@ -12,6 +12,7 @@
 }
 
 .grid-col-title {
+  font-size: calc(10px + 1.5vmin);
   font-weight: 400;
   padding-bottom: 6px;
 }

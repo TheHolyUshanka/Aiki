@@ -134,11 +134,12 @@ class Options extends React.Component {
             <Col className="grid-col">
               <h4 className="grid-col-title">Blocked Websites</h4>
               <Card className="grid-card">
-                <Input autoFocus ref={this.addBlockedWebsiteInput}
-                      placeholder="Block url..." 
+                <h4> Type in your distraction sites here:</h4>
+                <Input autoFocus ref={this.addBlockedWebsiteInput} style={{border:'1px solid black'}}
+                      placeholder="Type the url here..." 
                       onPressEnter={(e) => this.didAddBlockedWebsite(e)}
                       className='block-button'
-                      prefix={<Icon type="stop" style={{ color: 'rgba(0,0,0,.25)' }} />}/>
+                      borderColor='black'/>
                 <Col span ={7}>
                   <h4>Page Name</h4>
                 </Col>
