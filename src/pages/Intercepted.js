@@ -1,6 +1,6 @@
 import React from 'react';
 import { Progress, message, Icon, Row, Col, Button, Empty } from 'antd';
-import { getFromStorage, setInStorage } from '../util/storage';
+import { getFromStorage, setInStorage, setHistoricalFirebase } from '../util/storage';
 import {
     defaultExerciseSite,
     defaultExerciseSites,
@@ -17,7 +17,9 @@ class Intercepted extends React.Component {
       timestamp: new Date().getTime(),
       timer: null,
       exerciseSites: [],
-      exerciseDuration: 0
+      exerciseDuration: 0,
+      timeSpentLearningTemp: {},
+      closeSuccess: false
     }
 
     componentDidMount() {
@@ -36,7 +38,7 @@ class Intercepted extends React.Component {
 
             let timeLeft = this.state.timeLeft - timePassed;
             
-            if (timeLeft <= 0) clearInterval(this.state.timer)
+            //if (timeLeft <= 0) clearInterval(this.state.timer)
 
             // update time spent learning on website
             getFromStorage('timeSpentLearning').then(res => {
@@ -48,6 +50,9 @@ class Intercepted extends React.Component {
                 let newExerciseTimeSpent = timeSpentLearning[site.name]
                                                 + timePassed || timePassed;
                 timeSpentLearning[site.name] = newExerciseTimeSpent;
+
+                this.state.timeSpentLearningTemp = timeSpentLearning;
+                
                 return setInStorage({ timeSpentLearning });
             });
 
@@ -75,8 +80,16 @@ class Intercepted extends React.Component {
             
             let count = intercepts[parsed.hostname] + 1 || 1;
             intercepts[parsed.hostname] = count;
-
+            
+            setHistoricalFirebase({intercepts});
             return setInStorage({ intercepts });
+        });
+        
+        window.addEventListener('beforeunload', (event) => {
+            event.preventDefault();
+            if (!this.state.closeSuccess){
+                return setHistoricalFirebase(this.state.timeSpentLearningTemp);
+            }
         });
     }
 
@@ -98,6 +111,9 @@ class Intercepted extends React.Component {
         setTimeout(url, now + this.state.exerciseDuration).then(() => {
             window.location.href = url.href;
         });
+        
+        setHistoricalFirebase(this.state.timeSpentLearningTemp);
+        this.state.closeSuccess = true;
     }
 
     render() {

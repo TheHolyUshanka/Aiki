@@ -24,7 +24,7 @@ export const defaultExerciseSites = [
 
 export const defaultExerciseSite = defaultExerciseSites[1];
 
-export const defaultexerciseDuration = 1 * 30 * 1000; // 30 seconds
+export const defaultexerciseDuration = 1 * 10 * 1000; // 10 seconds
 
 export const defaultTimeout = 5 * 60 * 1000; // 5 minutes
 

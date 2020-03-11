@@ -33,7 +33,7 @@ class ExerciseOptions extends React.Component {
       .then(res => {
         let currentExerciseSite = res.currentExerciseSite || defaultExerciseSite.name;
         let exerciseSites = res.exerciseSites || defaultExerciseSites;
-        let exerciseDuration = res.exerciseDuration || defaultexerciseDuration;
+        let exerciseDuration = defaultexerciseDuration;
         if (exerciseSites.length === 0) currentExerciseSite = '';
 
       this.setState({ currentExerciseSite, exerciseSites, exerciseDuration });
@@ -181,14 +181,14 @@ class ExerciseOptions extends React.Component {
           <div class="container">
               00:{defaultexerciseDuration / 1000}
             </div>
-            {/* <TimePicker 
+            <TimePicker 
                 allowClear={false}
                 defaultValue={moment('12:08', 'mm:ss')}
                 value={moment(this.state.exerciseDuration)}
                 secondStep={5}
                 suffixIcon={<Icon type="hourglass" />}
                 format={'mm:ss'}
-                onChange={time => this.setExerciseDuration(time)} />  */}
+                onChange={time => this.setExerciseDuration(time)} />
         </Col>
       </Row>
       </>
