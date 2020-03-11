@@ -3,8 +3,8 @@ import firebase from "./fire";
 /* global chrome */
 let listeners = [];
 let study = "newTestRun";
-let historicalData = "historical"
-let uId = "3";
+let historicalData = "a"
+let uId = "2";
 
 export function getFromStorage(...keys) {
     return new Promise(resolve => {
@@ -43,7 +43,8 @@ export function setInStorage(items) {
         if (!items) return resolve();
 
         await setFirebaseData(items);
-        await setHistoricalFirebase(items);
+        //await setHistoricalFirebase(items);
+        //firstTimeRunStorage();
         
         if (window.chrome && chrome.storage) {
             chrome.storage.sync.set(items, () => {

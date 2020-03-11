@@ -37,7 +37,6 @@ class ExerciseOptions extends React.Component {
         if (exerciseSites.length === 0) currentExerciseSite = '';
 
       this.setState({ currentExerciseSite, exerciseSites, exerciseDuration });
-      this.setExerciseDuration(defaultexerciseDuration);
     });
   }
 
