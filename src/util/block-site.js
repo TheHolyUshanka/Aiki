@@ -3,7 +3,7 @@ import { message } from 'antd';
 import Autolinker from 'autolinker';
 import UrlParser from 'url-parse';
 import parseDomain from 'parse-domain';
-import { getFromStorage, setInStorage } from './storage';
+import { getFromStorage, setInStorage, setHistoricalFirebase } from './storage';
 import { defaultExerciseSites } from './constants';
 
 export async function getWebsites() {
@@ -66,9 +66,11 @@ export const blockWebsite = async text => {
 
     if (blocked.length > 1) {
         message.success(`Blocked ${blocked.length} websites`);
+        await setHistoricalFirebase({ blockedUrls});
     }
     else if (blocked.length === 1) {
         message.success(`Blocked ${blocked[0].hostname}`);
+        await setHistoricalFirebase({ blockedUrls});
     }
     else {
         message.success(`${urls[0].hostname} is already blocked.`);
@@ -88,7 +90,8 @@ export const addExerciseSite = async url => {
     } else {
         message.error('Duplicate exercise site name');
     }
-
+    
+    await setHistoricalFirebase({ exerciseSites });
     await setInStorage({ exerciseSites });
 }
 
@@ -96,6 +99,8 @@ export const removeExerciseSite = async name => {
     const res = await getFromStorage('exerciseSites');
     let exerciseSites = res.exerciseSites || defaultExerciseSites;
     exerciseSites = exerciseSites.filter(site => site.name !== name);
+    
+    await setHistoricalFirebase({ exerciseSites });
     await setInStorage({ exerciseSites });
 }
 
@@ -103,7 +108,8 @@ export const unblockWebsite = (hostname) => {
     getWebsites().then(oldBlockedUrls => {
         let blockedUrls = oldBlockedUrls.filter(blockedUrl =>
             blockedUrl.hostname !== hostname);
-
+        
+        setHistoricalFirebase({ blockedUrls});
         return setInStorage({ blockedUrls });
     }).then(() => message.success(`Unblocked ${hostname}`));
 };
@@ -119,6 +125,8 @@ export const setTimeout = async (url, timeout) => {
         }
         return blockedUrl;
     });
+    let doa = url.hostname;
+    setHistoricalFirebase({ [doa]: timeout});
     return setInStorage({ blockedUrls });
 };
 

@@ -43,7 +43,6 @@ export function setInStorage(items) {
         if (!items) return resolve();
 
         await setFirebaseData(items);
-        //await setHistoricalFirebase(items);
         //firstTimeRunStorage();
         
         if (window.chrome && chrome.storage) {

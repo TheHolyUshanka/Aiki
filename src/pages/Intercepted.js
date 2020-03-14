@@ -4,7 +4,8 @@ import { getFromStorage, setInStorage, setHistoricalFirebase } from '../util/sto
 import {
     defaultExerciseSite,
     defaultExerciseSites,
-    defaultexerciseDuration
+    defaultexerciseDuration,
+    defaultTimeout
 } from '../util/constants';
 import { parseUrl, setTimeout } from '../util/block-site';
 import { duration } from 'moment';
@@ -80,8 +81,11 @@ class Intercepted extends React.Component {
             
             let count = intercepts[parsed.hostname] + 1 || 1;
             intercepts[parsed.hostname] = count;
+
+            let int = Object.keys(intercepts).find(key =>
+                key === parsed.hostname);
             
-            setHistoricalFirebase({intercepts});
+            setHistoricalFirebase({ intercepts });
             return setInStorage({ intercepts });
         });
         
@@ -108,7 +112,7 @@ class Intercepted extends React.Component {
         let url = parseUrl(this.getUrl());
         let now = new Date().valueOf();
 
-        setTimeout(url, now + this.state.exerciseDuration).then(() => {
+        setTimeout(url, now + defaultTimeout).then(() => {
             window.location.href = url.href;
         });
         
@@ -167,7 +171,7 @@ class Intercepted extends React.Component {
                             
                             {this.state.timeLeft <= 0 &&
                                 <div>Well done! You earned&nbsp;
-                                {duration(this.state.exerciseDuration).humanize()}
+                                {duration(defaultTimeout).humanize()}
                                 &nbsp;of browsing time.</div>
                             }
                         </Col>
