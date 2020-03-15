@@ -51,22 +51,22 @@ class Statistics extends React.Component {
   }
 
   setup() {
-    // getFromStorage('intercepts',  'timeSpentLearning')
-    //   .then(res => {
-    //   let intercepts = res.intercepts || {};
-    //   let interceptsData = Object.keys(intercepts).map(key => ({
-    //     name: key,
-    //     value: intercepts[key]
-    //   }));
+    getFromStorage('intercepts',  'timeSpentLearning')
+      .then(res => {
+      let intercepts = res.intercepts || {};
+      let interceptsData = Object.keys(intercepts).map(key => ({
+        name: key,
+        value: intercepts[key]
+      }));
 
-    //   let timeSpentLearning = res.timeSpentLearning || {};
-    //   let timeSpentLearningData = Object.keys(timeSpentLearning).map(key => ({
-    //     name: key,
-    //     value: Math.round(timeSpentLearning[key] / 1000 / 60) // minutes
-    //   }));
+      let timeSpentLearning = res.timeSpentLearning || {};
+      let timeSpentLearningData = Object.keys(timeSpentLearning).map(key => ({
+        name: key,
+        value: Math.round(timeSpentLearning[key] / 1000 / 60) // minutes
+      }));
 
-    //   this.setState({ interceptsData, timeSpentLearningData });
-    // });
+      this.setState({ interceptsData, timeSpentLearningData });
+    });
     this.setState({ COLORS: ['#0088FE', '#00C49F', '#FFBB28', '#FF2F30', '#a52a2a', '#8884d8'] });
     this.setState({ interceptsData: 
                     this.state.interceptsData.sort(function(a,b) {
