@@ -40,8 +40,8 @@ class Statistics extends React.Component {
                     {"name":"e.dk", "value":4},
                     {"name":"f.dk", "value":5}],
     timeSpentLearningData: [{"name":"a.dk", "value":2},
-    {"name":"b.dk", "value":3},
-    {"name":"c.dk", "value":1}],
+                            {"name":"b.dk", "value":3},
+                            {"name":"c.dk", "value":1}],
     COLORS: []
   }
 
@@ -58,19 +58,18 @@ class Statistics extends React.Component {
         name: key,
         value: intercepts[key]
       }));
+      interceptsData.sort(function(a,b) {
+        return b.value - a.value});
 
       let timeSpentLearning = res.timeSpentLearning || {};
       let timeSpentLearningData = Object.keys(timeSpentLearning).map(key => ({
         name: key,
         value: Math.round(timeSpentLearning[key] / 1000 / 60) // minutes
       }));
-
+      
       this.setState({ interceptsData, timeSpentLearningData });
     });
     this.setState({ COLORS: ['#0088FE', '#00C49F', '#FFBB28', '#FF2F30', '#a52a2a', '#8884d8'] });
-    this.setState({ interceptsData: 
-                    this.state.interceptsData.sort(function(a,b) {
-                      return b.value - a.value})});
   }
 
   render() {
