@@ -52,7 +52,8 @@ class Intercepted extends React.Component {
                                                 + timePassed || timePassed;
                 timeSpentLearning[site.name] = newExerciseTimeSpent;
 
-                this.state.timeSpentLearningTemp = timeSpentLearning;
+                this.setState({timeSpentLearningTemp: timeSpentLearning});
+                //this.state.timeSpentLearningTemp = timeSpentLearning;
                 
                 return setInStorage({ timeSpentLearning });
             });
@@ -82,8 +83,8 @@ class Intercepted extends React.Component {
             let count = intercepts[parsed.hostname] + 1 || 1;
             intercepts[parsed.hostname] = count;
 
-            let int = Object.keys(intercepts).find(key =>
-                key === parsed.hostname);
+            /*let int = Object.keys(intercepts).find(key =>
+                key === parsed.hostname); */
             
             setHistoricalFirebase({ intercepts });
             return setInStorage({ intercepts });
@@ -91,6 +92,7 @@ class Intercepted extends React.Component {
         
         window.addEventListener('beforeunload', (event) => {
             event.preventDefault();
+
             if (!this.state.closeSuccess){
                 return setHistoricalFirebase(this.state.timeSpentLearningTemp);
             }
@@ -117,7 +119,7 @@ class Intercepted extends React.Component {
         });
         
         setHistoricalFirebase(this.state.timeSpentLearningTemp);
-        this.state.closeSuccess = true;
+        this.setState({closeSuccess: true});
     }
 
     render() {

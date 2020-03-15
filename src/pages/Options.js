@@ -1,4 +1,4 @@
-import { Button, Card, Col, Icon, Input, Layout, Row, Switch, Table, Tag } from 'antd';
+import { Button, Card, Col, Input, Layout, Row, Switch, Table, Tag } from 'antd';
 import moment, { duration } from 'moment';
 import React from 'react';
 import ExerciseOptions from '../components/options/ExerciseOptions';
@@ -11,6 +11,7 @@ const { Header, Content, Footer } = Layout;
 
 const columns = [
   {
+    title: 'Page Name',
     dataIndex: 'name',
     render: (name, site) => (
       <div>
@@ -18,18 +19,20 @@ const columns = [
         {name}
       </div>
     ),
-    width: 125,
+    width: 150,
     ellipsis: true, 
   },
   {
+    title: 'Page Url',
     dataIndex: 'regex',
     render: regex => (
       <code>{regex}</code>
     ),
-    width: 250,
+    width: 225,
     ellipsis: true,
   },
   {
+    title: 'Timeout',
     dataIndex: 'timeout',
     render: (timeout, site) => {
       
@@ -78,6 +81,7 @@ const columns = [
     }
   },
   {
+    title: 'Unblock page',
     dataIndex: 'hostname',
     render: hostname => (
       <Button type="link" shape="circle" icon="close"
@@ -140,23 +144,11 @@ class Options extends React.Component {
                       onPressEnter={(e) => this.didAddBlockedWebsite(e)}
                       className='block-button'
                       borderColor='black'/>
-                <Col span ={7}>
-                  <h4>Page Name</h4>
-                </Col>
-                <Col span ={8}>
-                  <h4>Page Url</h4>
-                </Col>
-                <Col span ={5}>
-                  <h4>Timeout</h4>
-                </Col>
-                <Col span ={4}>
-                  <h4>Unblock page</h4>
-                </Col>
+
                 <Table columns={columns}
                       dataSource={this.state.blockedUrls.map(
                         (obj, key) => ({ ...obj, key })
-                      )} 
-                      showHeader={false} />
+                      )} />
               </Card>
             </Col>
           </Row>
