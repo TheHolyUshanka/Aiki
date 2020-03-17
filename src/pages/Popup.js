@@ -19,7 +19,7 @@ class Popup extends React.Component {
   state = {
     currentBlocked: false,
     enabled: undefined,
-    totalTimeSpentLearningData:10000000,
+    totalTimeSpentLearningData:0,
     totalIntercepts:0
   };
 
@@ -36,17 +36,17 @@ class Popup extends React.Component {
         { enabled: true });
         // default value is enabled. will still undefined in storage untill one
         // turns the switch off.
-        // let intercepts = res.intercepts || {};
-        // let totalIntercepts = Object.values(intercepts).reduce(function(a, b) {
-        //   return a + b 
-        // },0);
+        let intercepts = res.intercepts || {};
+        let totalIntercepts = Object.values(intercepts).reduce(function(a, b) {
+          return a + b 
+        },0);
         
-        // let timeSpentLearning = res.timeSpentLearning || {};
-        // let totalTimeSpentLearningData = Object.values(timeSpentLearning).reduce(function(a, b) {
-        //   return a + b 
-        // },0);
+        let timeSpentLearning = res.timeSpentLearning || {};
+        let totalTimeSpentLearningData = Object.values(timeSpentLearning).reduce(function(a, b) {
+          return a + b 
+        },0);
 
-        // this.setState({totalIntercepts, totalTimeSpentLearningData});
+        this.setState({totalIntercepts, totalTimeSpentLearningData});
     });
     isCurrentWebsiteBlocked().then(currentBlocked => {
       this.setState({ currentBlocked });
@@ -84,13 +84,17 @@ class Popup extends React.Component {
       <div className="Popup">
         <header className="Popup-header">
           <Row>
-           <img src={logo} className="Popup-logo" alt="logo" />
-            Distraction Shield
+           <Col span={6}>
+             <img src={logo} className="Popup-logo" alt="logo" />
+           </Col>
+           <Col>
+              Distraction Shield
+           </Col>
           </Row>
         </header>
         <Row className="Popup-body">
           <Col span={4}>
-            Status:
+            Blocking:
           </Col>
           <Col style={{ textAlign: 'right'}}>
             <Switch
