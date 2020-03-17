@@ -20,7 +20,9 @@ class Intercepted extends React.Component {
       exerciseSites: [],
       exerciseDuration: 0,
       timeSpentLearningTemp: {},
-      closeSuccess: false
+      closeSuccess: false,
+      skipTimeLeft: 4000,
+      skipped: false
     }
 
     componentDidMount() {
@@ -36,6 +38,8 @@ class Intercepted extends React.Component {
             let timePassed = timestamp - this.state.timestamp;
 
             if (!document.hasFocus()) timePassed = 0;
+
+            let skipTimeLeft = this.state.skipTimeLeft - timePassed;
 
             let timeLeft = this.state.timeLeft - timePassed;
             
@@ -53,12 +57,11 @@ class Intercepted extends React.Component {
                 timeSpentLearning[site.name] = newExerciseTimeSpent;
 
                 this.setState({timeSpentLearningTemp: timeSpentLearning});
-                //this.state.timeSpentLearningTemp = timeSpentLearning;
                 
                 return setInStorage({ timeSpentLearning });
             });
 
-            this.setState({ timeLeft, timestamp });
+            this.setState({ timeLeft, timestamp, skipTimeLeft });
         }, 1000);
         this.setState({ timer });
     }
@@ -83,9 +86,6 @@ class Intercepted extends React.Component {
             let count = intercepts[parsed.hostname] + 1 || 1;
             intercepts[parsed.hostname] = count;
 
-            /*let int = Object.keys(intercepts).find(key =>
-                key === parsed.hostname); */
-            
             setHistoricalFirebase({ intercepts });
             return setInStorage({ intercepts });
         });
@@ -93,9 +93,10 @@ class Intercepted extends React.Component {
         window.addEventListener('beforeunload', (event) => {
             event.preventDefault();
 
-            if (!this.state.closeSuccess){
-                return setHistoricalFirebase(this.state.timeSpentLearningTemp);
+            if(!this.state.closeSuccess && this.state.timeLeft <= 0){
+                this.onContinue();
             }
+            return setHistoricalFirebase(this.state.timeSpentLearningTemp); 
         });
     }
 
@@ -111,15 +112,23 @@ class Intercepted extends React.Component {
     }
 
     onContinue() {
+        this.timeout();
+        setHistoricalFirebase('Succes');
+        this.setState({closeSuccess: true});
+    }
+
+    onSkip(){
+        this.timeout();
+        setHistoricalFirebase('Skipped');
+    }
+
+    timeout(){
         let url = parseUrl(this.getUrl());
         let now = new Date().valueOf();
 
         setTimeout(url, now + defaultTimeout).then(() => {
             window.location.href = url.href;
         });
-        
-        setHistoricalFirebase(this.state.timeSpentLearningTemp);
-        this.setState({closeSuccess: true});
     }
 
     render() {
@@ -164,7 +173,7 @@ class Intercepted extends React.Component {
                     </Row>
                     <Row
                         className="status-overlay">
-                        <Col span={12} offset={4}>
+                        <Col span={14} offset={4}>
                             <div>Time left: &nbsp;
                                 <small>
                                     <code>{timeLeftString}</code>
@@ -177,12 +186,20 @@ class Intercepted extends React.Component {
                                 &nbsp;of browsing time.</div>
                             }
                         </Col>
-                        <Col span={6}>
+                        <Col span={3}>
                             <Button icon="login"
                                 disabled={this.state.timeLeft > 0}
                                 onClick={() => this.onContinue()}
                                 >
                                 Continue to {url && url.name}
+                            </Button>
+                        </Col>
+                        <Col span={3}>
+                            <Button
+                                loading={this.state.skipTimeLeft > 0}
+                                onClick={() => this.onSkip()}
+                                >
+                                Emergency skip to {url && url.name}
                             </Button>
                         </Col>
                     </Row>

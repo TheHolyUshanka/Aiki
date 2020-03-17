@@ -42,7 +42,12 @@ class Statistics extends React.Component {
     timeSpentLearningData: [{"name":"a.dk", "value":2},
                             {"name":"b.dk", "value":3},
                             {"name":"c.dk", "value":1}],
-    colors: [],
+    colors: ['#FF0000', '#FF8000','#ffebcd', 
+            '#800000', '#4B0082', '#800080', 
+            '#AFEEEE', '#BDB76B', '#FF4500', 
+            '#FFFF00', '#FF00FF', '#808080', 
+            '#8B008B', '#708090', '#B0C4DE',
+            '#5f9ea0', '#6495ed', '#fff8dc'],
   }
 
   componentDidMount() {
@@ -66,10 +71,8 @@ class Statistics extends React.Component {
         name: key,
         value: Math.round(timeSpentLearning[key] / 1000 / 60) // minutes
       }));
-      
-      this.setState({ interceptsData, timeSpentLearningData });
+        this.setState({ interceptsData, timeSpentLearningData });
     });
-    this.setState({ colors: ['#0088FE', '#00C49F', '#FFBB28', '#FF2F30', '#a52a2a', '#8884d8'] });
   }
 
   render() {

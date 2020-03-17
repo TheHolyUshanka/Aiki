@@ -2,8 +2,8 @@ import React from 'react';
 import { addStorageListener, getFromStorage, setInStorage, setHistoricalFirebase } from '../../util/storage';
 import { defaultExerciseSite, defaultExerciseSites, defaultexerciseDuration, s2 } from '../../util/constants';
 import { addExerciseSite, parseUrls, removeExerciseSite } from '../../util/block-site';
-import { Row, Col, Input, Divider, TimePicker, Icon, Select, Button, Modal } from 'antd';
-import moment from 'moment';
+import { Row, Col, Input, Divider, /*TimePicker,*/ Icon, Select, Button, Modal } from 'antd';
+//import moment from 'moment';
 import './ExerciseOptions.css';
 
 const { Option } = Select;
