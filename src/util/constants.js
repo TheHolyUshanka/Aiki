@@ -28,6 +28,6 @@ export const defaultexerciseDuration = 1 * 10 * 1000; // 10 seconds
 
 export const defaultTimeout = 5 * 60 * 1000; // 5 minutes
 
-export const defaultTimeoutInterval = 5 * 60 * 1000; // 5 minute- increments
+export const defaultTimeoutInterval = 30 * 60 * 1000; // 30 minute- increments
 
 export const s2 = 'https://www.google.com/s2/favicons?domain=';

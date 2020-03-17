@@ -1,7 +1,12 @@
+html,
+body{
+  max-height: 50vh;
+}
+
 .Popup {
   text-align: center;
   background-color: #282c34;
-  min-height: 100vh;
+  min-height: 50vh;
   padding: 5px;
 }
 
@@ -13,30 +18,32 @@
 }
 
 .Popup-header>* {
-  flex: 1 1 160px;
+  flex: 1 1 100px;
   margin: 10px;
 }
 
-.Popup-status{
+.Popup-body{
   text-align: left;
   border-top: 1px solid gray;
   color: white;
   padding-top: 10px;
-  padding-bottom: 10px;
+  padding-bottom: 13px;
+}
+
+.Popup-statistics-title{
+  text-align: center;
+  color: white;
+}
+
+.Popup-statistics{
+  text-align: center;
+  color: greenyellow;
 }
 
 .Popup-current{
   border-top: 1px solid gray;
   color: white;
   padding-top: 10px;
-}
-
-.Popup-settings{
-  text-align: left;
-  border-top: 1px solid gray;
-  color: white;
-  padding-top: 10px;
-  padding-bottom: 10px;
 }
 
 .Popup-link {

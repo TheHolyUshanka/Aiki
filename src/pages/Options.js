@@ -4,7 +4,7 @@ import React from 'react';
 import ExerciseOptions from '../components/options/ExerciseOptions';
 import Statistics from '../components/options/Statistics';
 import { blockWebsite, setTimeout, unblockWebsite } from '../util/block-site';
-import { defaultTimeout, defaultTimeoutInterval, s2 } from '../util/constants';
+import { defaultTimeoutInterval, s2 } from '../util/constants';
 import { addStorageListener, getFromStorage } from '../util/storage';
 import './Options.css';
 const { Header, Content, Footer } = Layout;
@@ -52,7 +52,7 @@ const columns = [
           <Switch size="small" 
             checked={timedout}
             onChange={checked => 
-              setTimeout(site, checked ? now + defaultTimeout : now)
+              setTimeout(site, checked ? now + defaultTimeoutInterval : now)
             }
             style={{ marginRight: '5px' }}
             title="Toggle timeout of blockade" />

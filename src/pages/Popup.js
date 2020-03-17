@@ -18,7 +18,9 @@ import {
 class Popup extends React.Component {
   state = {
     currentBlocked: false,
-    enabled: undefined
+    enabled: undefined,
+    totalTimeSpentLearningData:10000000,
+    totalIntercepts:0
   };
 
   componentDidMount() {
@@ -27,12 +29,24 @@ class Popup extends React.Component {
   }
 
   setup() {
-    getFromStorage('enabled').then((res) => {
+    getFromStorage('enabled',  'intercepts',  'timeSpentLearning')
+      .then((res) => {
       this.setState(typeof res.enabled === 'boolean' ? 
         res : 
         { enabled: true });
         // default value is enabled. will still undefined in storage untill one
         // turns the switch off.
+        // let intercepts = res.intercepts || {};
+        // let totalIntercepts = Object.values(intercepts).reduce(function(a, b) {
+        //   return a + b 
+        // },0);
+        
+        // let timeSpentLearning = res.timeSpentLearning || {};
+        // let totalTimeSpentLearningData = Object.values(timeSpentLearning).reduce(function(a, b) {
+        //   return a + b 
+        // },0);
+
+        // this.setState({totalIntercepts, totalTimeSpentLearningData});
     });
     isCurrentWebsiteBlocked().then(currentBlocked => {
       this.setState({ currentBlocked });
@@ -54,6 +68,17 @@ class Popup extends React.Component {
     }
   }
 
+  convertToMinutesAndSeconds(){
+    let hours = Math.floor(this.state.totalTimeSpentLearningData / 3600000);
+    let minutes = Math.floor((this.state.totalTimeSpentLearningData / 60000)%60);
+    let seconds = ((this.state.totalTimeSpentLearningData % 60000) / 1000).toFixed(0);
+    if(hours < 1) {
+      return minutes + " min " + seconds + " sec";
+    } else {
+      return hours + " hours " + minutes + " min " + seconds + " sec";
+    }
+  }
+
   render() {
     return (
       <div className="Popup">
@@ -63,7 +88,7 @@ class Popup extends React.Component {
             Distraction Shield
           </Row>
         </header>
-        <Row className="Popup-status">
+        <Row className="Popup-body">
           <Col span={4}>
             Status:
           </Col>
@@ -76,7 +101,7 @@ class Popup extends React.Component {
                     unCheckedChildren="Disabled"/>
           </Col>
         </Row>
-        <Row className="Popup-settings">
+        <Row className="Popup-body">
           <Col span={4}>
             Settings:
           </Col>
@@ -86,6 +111,22 @@ class Popup extends React.Component {
             />
           </Col>
         </Row>   
+        <Row className="Popup-body">
+          <Col className="Popup-statistics-title">
+            Total intercepts: 
+          </Col>
+          <Col className="Popup-statistics">
+            {this.state.totalIntercepts}
+          </Col>         
+        </Row>
+        <Row className="Popup-body">
+          <Col className="Popup-statistics-title">
+            Time spent learning:
+          </Col>
+          <Col className="Popup-statistics">
+            {this.convertToMinutesAndSeconds()}
+          </Col>      
+        </Row>
         <Row className="Popup-current">
           <Col>
             <Button ghost={this.state.currentBlocked}
@@ -96,7 +137,7 @@ class Popup extends React.Component {
               {this.state.currentBlocked ? 'Unblock current page' : 'Block current page'}
             </Button>
           </Col>
-        </Row>     
+        </Row>      
       </div>
     );
   }

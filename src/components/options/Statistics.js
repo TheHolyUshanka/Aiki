@@ -42,7 +42,7 @@ class Statistics extends React.Component {
     timeSpentLearningData: [{"name":"a.dk", "value":2},
                             {"name":"b.dk", "value":3},
                             {"name":"c.dk", "value":1}],
-    COLORS: []
+    colors: [],
   }
 
   componentDidMount() {
@@ -69,7 +69,7 @@ class Statistics extends React.Component {
       
       this.setState({ interceptsData, timeSpentLearningData });
     });
-    this.setState({ COLORS: ['#0088FE', '#00C49F', '#FFBB28', '#FF2F30', '#a52a2a', '#8884d8'] });
+    this.setState({ colors: ['#0088FE', '#00C49F', '#FFBB28', '#FF2F30', '#a52a2a', '#8884d8'] });
   }
 
   render() {
@@ -84,7 +84,7 @@ class Statistics extends React.Component {
                         cx={125} cy={150} outerRadius={80} fill="#8884d8"
                         label>
                           {
-                            this.state.interceptsData.map((entry, index) => <Cell fill={this.state.COLORS[index % this.state.COLORS.length]}/>)
+                            this.state.interceptsData.map((entry, index) => <Cell fill={this.state.colors[index % this.state.colors.length]}/>)
                           }
                       </Pie>
                 <Tooltip />
