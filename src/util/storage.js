@@ -87,9 +87,10 @@ export async function setHistoricalFirebase(items) {
     });    
 }
 
-export function firstTimeRunStorage() {
+export function firstTimeRunStorage(UUID) {
+    uId = UUID;
     return new Promise(async resolve => {
-            await firebase.firestore().collection(historicalData).doc(uId).set({
+            await firebase.firestore().collection(historicalData).doc(UUID).set({
             }).catch(console.error);
             resolve();
     });

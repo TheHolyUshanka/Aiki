@@ -1,9 +1,20 @@
 /* global chrome */
 
+
+
 let BACKGROUND_CACHE = {
     enabled: true, // default value
     blockedUrls: [] // default value
 };
+
+// When installed, show welcome page
+chrome.runtime.onInstalled.addListener(function (details) {
+    if (details.reason === "chrome_update") {
+        return void 0;
+    } else if (details.reason === "install") {
+        return chrome.tabs.create({"url": "index.html?page=options" });
+    }
+});
 
 chrome.storage.onChanged.addListener(changes => {
     setup();
