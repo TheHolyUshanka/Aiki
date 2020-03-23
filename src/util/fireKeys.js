@@ -1,3 +1,3 @@
-export const API_KEY = "";
+export const API_KEY = "2";
 
-export const APP_ID = "";
+export const APP_ID = "1";
