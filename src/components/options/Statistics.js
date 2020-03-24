@@ -1,5 +1,5 @@
 import React from 'react';
-import { addStorageListener, getFromStorage } from '../../util/storage';
+import { addStorageListener, getFromStorage, setInStorage } from '../../util/storage';
 import {
     Bar,
     BarChart,
@@ -13,6 +13,7 @@ import {
     Cell
 } from 'recharts';
 import { Table, Col, Row, Divider} from 'antd';
+import { defaultColors } from '../../util/constants';
 
 const columns =[
   {
@@ -33,21 +34,9 @@ const columns =[
 
 class Statistics extends React.Component {
   state = {
-    interceptsData: [{"name":"a.dk", "value":2},
-                    {"name":"b.dk", "value":3},
-                    {"name":"c.dk", "value":1},
-                    {"name":"d.dk", "value":2},
-                    {"name":"e.dk", "value":4},
-                    {"name":"f.dk", "value":5}],
-    timeSpentLearningData: [{"name":"a.dk", "value":2},
-                            {"name":"b.dk", "value":3},
-                            {"name":"c.dk", "value":1}],
-    colors: ['#FF0000', '#FF8000','#ffebcd', 
-            '#800000', '#4B0082', '#800080', 
-            '#AFEEEE', '#BDB76B', '#FF4500', 
-            '#FFFF00', '#FF00FF', '#808080', 
-            '#8B008B', '#708090', '#B0C4DE',
-            '#5f9ea0', '#6495ed', '#fff8dc'],
+    interceptsData: [],
+    timeSpentLearningData: [],
+    colors: defaultColors
   }
 
   componentDidMount() {
@@ -73,13 +62,15 @@ class Statistics extends React.Component {
       }));
         this.setState({ interceptsData, timeSpentLearningData });
     });
+
+    setInStorage()
   }
 
   render() {
     return (
       <>
         <Row>
-        <h4>Your most distracting sites are the following:</h4>
+        <h4>Your most distracting sites are:</h4>
           <Col span = {15}>
             <PieChart width={300} height={300}>
                 <Pie dataKey="value" isAnimationActive={false}
