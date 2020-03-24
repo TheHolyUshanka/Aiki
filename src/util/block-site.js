@@ -38,7 +38,7 @@ export const isCurrentWebsiteBlocked = () => {
 
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
             let tab = tabs[0];
-            let hostname = new UrlParser(tab.url).hostname;
+            let hostname = regexTheHostname(new UrlParser(tab.url).hostname);
             isWebsiteBlocked(hostname).then(resolve);
         });
     });
@@ -170,7 +170,8 @@ const urlToParser = (match) => {
 
 const mapToBlockedUrl = (parser) => {
     let regex = `*://*.${parser.hostname}/*`;
-    let { hostname, href, pathname } = parser;
+    let hostname = regexTheHostname(parser.hostname);
+    let { href, pathname } = parser;
 
     return {
         hostname,
@@ -178,4 +179,8 @@ const mapToBlockedUrl = (parser) => {
         pathname,
         regex
     };
+}
+
+const regexTheHostname = (hostname) => {
+    return hostname.match(/(^(?:https?:\/\/)?)((?:[^@\/\n]+@)?)(?:www\.)?([^:\/?\n]+)/)[3];
 }

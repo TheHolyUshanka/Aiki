@@ -18,9 +18,11 @@ import {
 class Popup extends React.Component {
   state = {
     currentBlocked: false,
+    currentAnInterceptionSite: false,
     enabled: undefined,
     totalTimeSpentLearningData:0,
-    totalIntercepts:0
+    totalIntercepts:0,
+    rexTitle: "www.br.dk"
   };
 
   componentDidMount() {
@@ -51,6 +53,12 @@ class Popup extends React.Component {
     isCurrentWebsiteBlocked().then(currentBlocked => {
       this.setState({ currentBlocked });
     });
+  }
+
+  testRex(){
+    let rex =/(^(?:https?:\/\/)?)((?:[^@\/\n]+@)?)(?:www\.)?([^:\/?\n]+)/;
+    let newRexTitle = this.state.rexTitle.match(rex)[3];
+    this.setState({rexTitle: newRexTitle});
   }
 
   onSwitchChange(enabled) {
@@ -88,7 +96,8 @@ class Popup extends React.Component {
              <img src={logo} className="Popup-logo" alt="logo" />
            </Col>
            <Col>
-              Distraction Shield
+              Distraction Shield 
+              {this.state.rexTitle}
            </Col>
           </Row>
         </header>

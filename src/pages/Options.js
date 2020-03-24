@@ -24,9 +24,9 @@ const columns = [
   },
   {
     title: 'Page Url',
-    dataIndex: 'regex',
-    render: regex => (
-      <code>{regex}</code>
+    dataIndex: 'hostname',
+    render: hostname => (
+      <code>{hostname}</code>
     ),
     width: 225,
     ellipsis: true,
