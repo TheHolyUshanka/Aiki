@@ -2,9 +2,7 @@ import firebase from "./fire";
 
 /* global chrome */
 let listeners = [];
-let study = "newTestRun";
 let historicalData = "a"
-let uId = "2";
 
 export function getFromStorage(...keys) {
     return new Promise(resolve => {
@@ -42,7 +40,7 @@ export function setInStorage(items) {
     return new Promise(async resolve => {
         if (!items) return resolve();
 
-        await setFirebaseData(items);
+        //await setFirebaseData(items);
         //firstTimeRunStorage();
         
         if (window.chrome && chrome.storage) {
@@ -65,30 +63,39 @@ export function setInStorage(items) {
     });
 }
 
-export async function setFirebaseData(items) {
-        if(!items) return;
+// export async function setFirebaseData(items) {
+//         if(!items) return;
 
-        Object.keys(items).forEach( async key => {
-            await firebase.firestore().collection(study).doc(uId).update({
-                [key]: items[key]
-            });
-        });
-}
+//         Object.keys(items).forEach( async key => {
+//             await firebase.firestore().collection(study).doc(uId).update({
+//                 [key]: items[key]
+//             });
+//         });
+// }
 
 export async function setHistoricalFirebase(items) {
     if(!items) return;
 
-    let timeStamp = [new Date().getTime()];
+    chrome.storage.sync.get(['userid', 'firstRun'], async res => {
+        var first = res.firstRun;
+        var uId = res.userid;
 
-    timeStamp.push(items);
+        if(first){
+            firstTimeRunStorage(uId);
+            chrome.storage.sync.set({'firstRun': false})
+        }
+        
+        let timeStamp = [new Date().getTime()];
 
-    await firebase.firestore().collection(historicalData).doc(uId).update({
-        [timeStamp[0]]: timeStamp[1]
+        timeStamp.push(items);
+
+        await firebase.firestore().collection(historicalData).doc(uId).update({
+            [timeStamp[0]]: timeStamp[1]
+        });
     });    
 }
 
 export function firstTimeRunStorage(UUID) {
-    uId = UUID;
     return new Promise(async resolve => {
             await firebase.firestore().collection(historicalData).doc(UUID).set({
             }).catch(console.error);

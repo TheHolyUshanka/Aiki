@@ -81,13 +81,13 @@ const columns = [
     }
   },
   {
-    title: 'Unblock page',
+    title: 'Remove interception',
     dataIndex: 'hostname',
     render: hostname => (
       <Button type="link" shape="circle" icon="close"
         onClick={() => unblockWebsite(hostname)}
         className="remove-button"
-        title="Unblock website"/>
+        title="Remove interception"/>
     ),
     align: 'right'
   },
@@ -136,7 +136,7 @@ class Options extends React.Component {
         <Content style={{ padding: '20px 50px' }}>
           <Row type="flex" justify="center">
             <Col className="grid-col">
-              <h4 className="grid-col-title">Blocked Websites</h4>
+              <h4 className="grid-col-title">Intercepted Websites</h4>
               <Card className="grid-card">
                 <h4> Type in your distraction sites here:</h4>
                 <Input autoFocus ref={this.addBlockedWebsiteInput} style={{border:'1px solid black'}}
@@ -154,7 +154,7 @@ class Options extends React.Component {
           </Row>
           <Row type="flex" justify="center">
             <Col className="grid-col">
-              <h4 className="grid-col-title">Exercise page and time</h4>
+              <h4 className="grid-col-title">Exercise settings</h4>
               <Card className="grid-card">
                 <ExerciseOptions />
               </Card>

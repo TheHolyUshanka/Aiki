@@ -2,9 +2,8 @@ import React from 'react';
 import { addStorageListener, getFromStorage, setInStorage, setHistoricalFirebase } from '../../util/storage';
 import { defaultExerciseSite, defaultExerciseSites, defaultexerciseDuration, s2 } from '../../util/constants';
 import { addExerciseSite, parseUrls, removeExerciseSite } from '../../util/block-site';
-import { Row, Col, Input, Divider, /*TimePicker,*/ Icon, Select, Button, Modal } from 'antd';
-//import moment from 'moment';
-import './ExerciseOptions.css';
+import { Row, Col, Input, Divider, TimePicker, Icon, Select, Button, Modal } from 'antd';
+import moment from 'moment';
 
 const { Option } = Select;
 
@@ -33,7 +32,7 @@ class ExerciseOptions extends React.Component {
       .then(res => {
         let currentExerciseSite = res.currentExerciseSite || defaultExerciseSite.name;
         let exerciseSites = res.exerciseSites || defaultExerciseSites;
-        let exerciseDuration = defaultexerciseDuration;
+        let exerciseDuration = res.exerciseDuration || defaultexerciseDuration;
         if (exerciseSites.length === 0) currentExerciseSite = '';
 
       this.setState({ currentExerciseSite, exerciseSites, exerciseDuration });
@@ -108,7 +107,7 @@ class ExerciseOptions extends React.Component {
       <>
       <Row>
         <Col span={8}>
-          Current exercise website
+          Set your exercise website:
         </Col>
         <Col span={16} style={{ textAlign: 'right' }}>
           <Select
@@ -176,21 +175,18 @@ class ExerciseOptions extends React.Component {
         <Col span={5}style={{ textAlign: 'center'}}>
           Minutes | Seconds
         </Col>
-        <Col span={10}>
-          Exercise duration
+        <Col span={7}>
+          Set your exercise duration:
         </Col>
-        <Col span={14} style={{ textAlign: 'center'}}>
-          <div class="container">
-              00:{defaultexerciseDuration / 1000}
-          </div>
-            {/* <TimePicker 
+        <Col span={17} style={{ textAlign: 'right'}}>
+            <TimePicker 
                 allowClear={false}
                 defaultValue={moment('12:08', 'mm:ss')}
                 value={moment(this.state.exerciseDuration)}
                 secondStep={5}
                 suffixIcon={<Icon type="hourglass" />}
                 format={'mm:ss'}
-                onChange={time => this.setExerciseDuration(time)} /> */}
+                onChange={time => this.setExerciseDuration(time)} />
         </Col>
       </Row> 
       </>

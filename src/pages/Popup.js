@@ -94,25 +94,25 @@ class Popup extends React.Component {
         </header>
         <Row className="Popup-body">
           <Col span={4}>
-            Blocking:
-          </Col>
-          <Col style={{ textAlign: 'right'}}>
-            <Switch
-                    loading={this.state.enabled === undefined}
-                    checked={this.state.enabled}
-                    onChange={checked => this.onSwitchChange(checked)} 
-                    checkedChildren="Enabled" 
-                    unCheckedChildren="Disabled"/>
-          </Col>
-        </Row>
-        <Row className="Popup-body">
-          <Col span={4}>
             Settings:
           </Col>
           <Col style={{ textAlign: 'right'}}>
             <Button type="default" shape="circle" icon="setting"
               onClick={() => this.openOptionsPage()}
             />
+          </Col>
+        </Row>
+        <Row className="Popup-body">
+          <Col className="Popup-statistics-title">
+            Intercepting:
+          </Col>
+          <Col style={{ textAlign: 'center'}}>
+            <Switch
+                    loading={this.state.enabled === undefined}
+                    checked={this.state.enabled}
+                    onChange={checked => this.onSwitchChange(checked)} 
+                    checkedChildren="Enabled" 
+                    unCheckedChildren="Disabled"/>
           </Col>
         </Row>   
         <Row className="Popup-body">
@@ -138,7 +138,7 @@ class Popup extends React.Component {
                 !this.state.currentBlocked && blockCurrentWebsite();
                 this.state.currentBlocked && unBlockCurrentWebsite();
               }}>
-              {this.state.currentBlocked ? 'Unblock current page' : 'Block current page'}
+              {this.state.currentBlocked ? 'Don\'t intercept this' : 'Intercept this page'}
             </Button>
           </Col>
         </Row>      
