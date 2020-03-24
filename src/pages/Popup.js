@@ -55,12 +55,6 @@ class Popup extends React.Component {
     });
   }
 
-  testRex(){
-    let rex =/(^(?:https?:\/\/)?)((?:[^@\/\n]+@)?)(?:www\.)?([^:\/?\n]+)/;
-    let newRexTitle = this.state.rexTitle.match(rex)[3];
-    this.setState({rexTitle: newRexTitle});
-  }
-
   onSwitchChange(enabled) {
     this.setState({ enabled });
     setHistoricalFirebase({ enabled});
@@ -96,8 +90,7 @@ class Popup extends React.Component {
              <img src={logo} className="Popup-logo" alt="logo" />
            </Col>
            <Col>
-              Distraction Shield 
-              {this.state.rexTitle}
+              Distraction Shield
            </Col>
           </Row>
         </header>
