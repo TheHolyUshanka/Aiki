@@ -90,7 +90,7 @@ class Popup extends React.Component {
              <img src={logo} className="Popup-logo" alt="logo" />
            </Col>
            <Col>
-              Distraction Shield
+              Aiki
            </Col>
           </Row>
         </header>

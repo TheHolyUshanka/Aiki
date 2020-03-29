@@ -57,7 +57,7 @@ export const blockWebsite = async text => {
     const blockedUrls = await getWebsites();
     
     let notBlocked = url => {
-        return !blockedUrls.find(blocked => blocked.regex === url.regex);
+        return !blockedUrls.find(blocked => blocked.hostname === url.hostname);
     };
     let blocked = urls.filter(notBlocked);
     blockedUrls.push(...blocked);

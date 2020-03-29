@@ -130,7 +130,7 @@ class Options extends React.Component {
       <Layout style={{ background: 'rgb(248, 249, 250)' }}>
         <Header>
           <header className="Options-header">
-            Distraction Shield
+            Aiki
           </header>
         </Header>
         <Content style={{ padding: '20px 50px' }}>
