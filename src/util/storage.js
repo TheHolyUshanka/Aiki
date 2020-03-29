@@ -2,7 +2,7 @@ import firebase from "./fire";
 
 /* global chrome */
 let listeners = [];
-let historicalData = "a"
+let historicalData = "CaseStudy"
 
 export function getFromStorage(...keys) {
     return new Promise(resolve => {
