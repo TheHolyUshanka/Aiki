@@ -115,10 +115,9 @@ class Options extends React.Component {
     });
   }
   
-  didAddBlockedWebsite(e) {
-    let url = e.target.getAttribute('value');
-    this.addBlockedWebsiteInput.current.setValue('');
-    blockWebsite(url);
+  didAddBlockedWebsite(url) {
+   this.addBlockedWebsiteInput.current.input.setValue('');
+   blockWebsite(url);
   }
 
   renderLabel({ value }) {
@@ -126,6 +125,7 @@ class Options extends React.Component {
   }
 
   render() {
+    const Search = Input.Search;
     return (
       <Layout style={{ background: 'rgb(248, 249, 250)' }}>
         <Header>
@@ -139,12 +139,13 @@ class Options extends React.Component {
               <h4 className="grid-col-title">Intercepted Websites</h4>
               <Card className="grid-card">
                 <h4> Type in your distraction sites here:</h4>
-                <Input autoFocus ref={this.addBlockedWebsiteInput} style={{border:'1px solid black'}}
+                <Search autoFocus ref={this.addBlockedWebsiteInput}
                       placeholder="Type the url here..." 
-                      onPressEnter={(e) => this.didAddBlockedWebsite(e)}
+                      enterButton="Add"
+                      onSearch={(e) => this.didAddBlockedWebsite(e)}
                       className='block-button'
                       borderColor='black'/>
-
+            
                 <Table columns={columns}
                       dataSource={this.state.blockedUrls.map(
                         (obj, key) => ({ ...obj, key })
@@ -169,7 +170,7 @@ class Options extends React.Component {
             </Col>
           </Row>
         </Content>
-        <Footer style={{ textAlign: 'center' }}>University of Groningen © 2019</Footer>
+        <Footer style={{ textAlign: 'center' }}>IT University of Copenhagen © 2020</Footer>
       </Layout>
     );
   }
