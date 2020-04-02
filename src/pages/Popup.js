@@ -21,8 +21,7 @@ class Popup extends React.Component {
     currentAnInterceptionSite: false,
     enabled: undefined,
     totalTimeSpentLearningData:0,
-    totalIntercepts:0,
-    rexTitle: "www.br.dk"
+    totalIntercepts:0
   };
 
   componentDidMount() {

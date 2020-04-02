@@ -42,8 +42,6 @@ class Intercepted extends React.Component {
             let skipTimeLeft = this.state.skipTimeLeft - timePassed;
 
             let timeLeft = this.state.timeLeft - timePassed;
-            
-            //if (timeLeft <= 0) clearInterval(this.state.timer)
 
             // update time spent learning on website
             getFromStorage('timeSpentLearning').then(res => {
@@ -174,28 +172,33 @@ class Intercepted extends React.Component {
                     <Row
                         className="status-overlay">
                         <Col span={14} offset={4}>
+                            {this.state.timeLeft > 0 &&
                             <div>Time left: &nbsp;
                                 <small>
                                     <code>{timeLeftString}</code>
                                 </small>
                             </div>
-                            
+                            }
+
                             {this.state.timeLeft <= 0 &&
                                 <div>Well done! You earned&nbsp;
                                 {duration(defaultTimeout).humanize()}
                                 &nbsp;of browsing time.</div>
                             }
                         </Col>
-                        <Col span={3}>
-                            <Button icon="login"
+                        <Col span={6}>
+                            <Button style={{ background: "#73d13d"}} 
+                                icon="login"
                                 disabled={this.state.timeLeft > 0}
                                 onClick={() => this.onContinue()}
                                 >
                                 Continue to {url && url.name}
                             </Button>
                         </Col>
-                        <Col span={3}>
+                        <Col justify="end" span={4} offset={20}>
                             <Button
+                                type="dashed"
+                                size="small"
                                 loading={this.state.skipTimeLeft > 0}
                                 onClick={() => this.onSkip()}
                                 >

@@ -1,5 +1,6 @@
+/* global chrome */
 import React from 'react';
-import { addStorageListener, getFromStorage, setInStorage } from '../../util/storage';
+import { addStorageListener, getFromStorage, setInStorage, } from '../../util/storage';
 import {
     Bar,
     BarChart,
@@ -12,8 +13,9 @@ import {
     YAxis,
     Cell
 } from 'recharts';
-import { Table, Col, Row, Divider} from 'antd';
+import { Table, Col, Row, Divider, Button} from 'antd';
 import { defaultColors } from '../../util/constants';
+import { changeConfirmLocale } from 'antd/lib/modal/locale';
 
 const columns =[
   {
@@ -36,7 +38,8 @@ class Statistics extends React.Component {
   state = {
     interceptsData: [],
     timeSpentLearningData: [],
-    colors: defaultColors
+    colors: defaultColors,
+    firstTimeUsage: true
   }
 
   componentDidMount() {
@@ -60,7 +63,9 @@ class Statistics extends React.Component {
         name: key,
         value: Math.round(timeSpentLearning[key] / 1000 / 60) // minutes
       }));
-        this.setState({ interceptsData, timeSpentLearningData });
+
+      let firstTimeUsage = interceptsData.length === 0;
+        this.setState({ interceptsData, timeSpentLearningData, firstTimeUsage });
     });
 
     setInStorage()
@@ -69,6 +74,14 @@ class Statistics extends React.Component {
   render() {
     return (
       <>
+        {this.state.interceptsData.length === 0 &&(
+        <Row>
+          <h3 style={{textAlign: 'center'}}>
+            Your stats will show up here as soon as you start using Aiki
+          </h3>
+        </Row>)}
+        
+        {this.state.interceptsData.length !== 0 && (
         <Row>
         <h4>Your most distracting sites are:</h4>
           <Col span = {15}>
@@ -78,18 +91,32 @@ class Statistics extends React.Component {
                         cx={125} cy={150} outerRadius={80} fill="#8884d8"
                         label>
                           {
-                            this.state.interceptsData.map((entry, index) => <Cell fill={this.state.colors[index % this.state.colors.length]}/>)
+                            this.state.interceptsData.map((_, index) => <Cell fill={this.state.colors[index % this.state.colors.length]}/>)
                           }
                       </Pie>
                 <Tooltip />
             </PieChart>
           </Col>
           <Col span = {9}>
-            <Table columns={columns}
-                      dataSource={this.state.interceptsData} />
+            <Table 
+              columns={columns}
+              dataSource={this.state.interceptsData} />
           </Col>
+          
         </Row>
+        )}
         <Divider />
+        <Row style={{textAlign:'center'}}>
+          <Button
+            size="large"
+            type="primary" onClick={() => {
+              window.location.assign('https://www.google.com');
+            }}>
+            {this.state.firstTimeUsage ? 'Start using Aiki' : 'Update settings'}
+           </Button>
+        </Row>
+
+        {/* <Divider />
         <Row>
         <h4>Time spent on exercises:</h4>
           <BarChart
@@ -107,7 +134,7 @@ class Statistics extends React.Component {
               <Legend />
               <Bar dataKey="value" fill="#8884d8" name="Time spent (minutes)" />
           </BarChart>
-        </Row>
+        </Row> */}
       </>
     )
   }
