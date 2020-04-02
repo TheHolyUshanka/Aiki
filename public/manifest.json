@@ -3,7 +3,7 @@
   "short_name": "Aiki",
   "name": "Aiki",
   "description": "Improvement of language learning through intercepting procrastination behavior",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "icons": {
     "128": "/images/aikido.png"
   },

@@ -1,21 +1,13 @@
-/* global chrome */
 import React from 'react';
 import { addStorageListener, getFromStorage, setInStorage, } from '../../util/storage';
 import {
-    Bar,
-    BarChart,
-    CartesianGrid,
-    Legend,
     Pie,
     PieChart,
     Tooltip,
-    XAxis,
-    YAxis,
     Cell
 } from 'recharts';
 import { Table, Col, Row, Divider, Button} from 'antd';
 import { defaultColors } from '../../util/constants';
-import { changeConfirmLocale } from 'antd/lib/modal/locale';
 
 const columns =[
   {

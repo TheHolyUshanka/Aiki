@@ -166,7 +166,7 @@ class Intercepted extends React.Component {
                             percent={progressPercentage}
                             size="small"
                             showInfo={false}
-                            strokeWidth={4}
+                            strokeWidth={5}
                             />
                     </Row>
                     <Row
@@ -187,7 +187,8 @@ class Intercepted extends React.Component {
                             }
                         </Col>
                         <Col span={6}>
-                            <Button style={{ background: "#73d13d"}} 
+                            <Button style={{ background: "#52c41a"}}
+                                type="primary" 
                                 icon="login"
                                 disabled={this.state.timeLeft > 0}
                                 onClick={() => this.onContinue()}

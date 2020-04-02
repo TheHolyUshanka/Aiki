@@ -129,16 +129,25 @@ class Options extends React.Component {
     return (
       <Layout style={{ background: 'rgb(248, 249, 250)' }}>
         <Header>
-          <header className="Options-header">
-            Aiki
-          </header>
+            <Col span={12}>
+              <header className="Options-header">
+                Aiki 
+              </header>
+            </Col>
+            <Col span={11} offset={1}>
+            <header className="Options-subheader">
+              <i> 
+                Exchange your procrastination into microlearnings 
+              </i>
+            </header>
+            </Col>
         </Header>
         <Content style={{ padding: '20px 50px' }}>
           <Row type="flex" justify="center">
             <Col className="grid-col">
               <h4 className="grid-col-title">Intercepted Websites</h4>
               <Card className="grid-card">
-                <h4> Type in your distraction sites here:</h4>
+                <h4> Type in pages you feel like you spend a little too much time on here:</h4>
                 <Search autoFocus ref={this.addBlockedWebsiteInput}
                       placeholder="Type the url here..." 
                       enterButton="Add"
