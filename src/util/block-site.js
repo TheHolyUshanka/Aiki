@@ -27,7 +27,7 @@ export const unBlockCurrentWebsite = () => {
 
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         let tab = tabs[0];
-        let hostname = new UrlParser(tab.url).hostname;
+        let hostname = regexTheHostname(new UrlParser(tab.url).hostname);
         unblockWebsite(hostname);
     });
 }
