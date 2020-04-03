@@ -43,6 +43,8 @@ class Intercepted extends React.Component {
 
             let timeLeft = this.state.timeLeft - timePassed;
 
+            if (timeLeft <= 0) clearInterval(this.state.timer)
+
             // update time spent learning on website
             getFromStorage('timeSpentLearning').then(res => {
                 let timeSpentLearning = res.timeSpentLearning || {};
@@ -57,10 +59,11 @@ class Intercepted extends React.Component {
                 this.setState({timeSpentLearningTemp: timeSpentLearning});
                 
                 return setInStorage({ timeSpentLearning });
-            });
+            }); 
 
             this.setState({ timeLeft, timestamp, skipTimeLeft });
         }, 1000);
+        
         this.setState({ timer });
     }
 
@@ -91,9 +94,28 @@ class Intercepted extends React.Component {
         window.addEventListener('beforeunload', (event) => {
             event.preventDefault();
 
-            if(!this.state.closeSuccess && this.state.timeLeft <= 0){
-                this.onContinue();
+            if(this.state.timeLeft <= 0){
+                getFromStorage('timeSpentLearning').then(res => {
+                    let timeSpentLearning = res.timeSpentLearning || {};
+                    let site = this.getExerciseSite();
+                    let timestamp = new Date().getTime();
+                    let timePassed = timestamp - this.state.timestamp;
+    
+                    if (!site) return; // not found, do not update.
+    
+                    let newExerciseTimeSpent = timeSpentLearning[site.name]
+                                                    + timePassed || timePassed;
+                    timeSpentLearning[site.name] = newExerciseTimeSpent;
+    
+                    this.setState({timeSpentLearningTemp: timeSpentLearning});
+                    
+                    return setInStorage({ timeSpentLearning });
+                });
+                if(!this.state.closeSuccess){
+                    this.onContinue();
+                }
             }
+                        
             return setHistoricalFirebase(this.state.timeSpentLearningTemp); 
         });
     }

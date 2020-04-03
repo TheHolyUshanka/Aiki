@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "short_name": "Aiki",
   "name": "Aiki",
-  "description": "Improvement of language learning through intercepting procrastination behavior",
+  "description": "Exchange your procrastination into microlearnings",
   "version": "1.0.1",
   "icons": {
     "128": "/images/aikido.png"
