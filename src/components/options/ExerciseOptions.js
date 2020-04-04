@@ -106,10 +106,10 @@ class ExerciseOptions extends React.Component {
     return (
       <>
       <Row>
-        <Col span={8}>
-          Set your exercise website:
-        </Col>
-        <Col span={16} style={{ textAlign: 'right' }}>
+        <h4 style={{ textAlign: 'center'}}>
+          Choose your exercise website for the exchanged time here:
+        </h4>
+        <Col style={{ textAlign: 'center' }}>
           <Select
             value={this.state.currentExerciseSite}
             style={{ width: 170 }}
@@ -170,15 +170,13 @@ class ExerciseOptions extends React.Component {
       </Row>
       <Divider />
       <Row>
-        <Col span={19}>
-        </Col>
-        <Col span={5}style={{ textAlign: 'center'}}>
+        <h4 style={{ textAlign: 'center'}}>
+          Choose the length of your time exchange before entering a time-wasting website:
+        </h4>
+        <Col style={{ textAlign: 'center'}}>
           Minutes | Seconds
         </Col>
-        <Col span={7}>
-          Set your exercise duration:
-        </Col>
-        <Col span={17} style={{ textAlign: 'right'}}>
+        <Col style={{ textAlign: 'center'}}>
             <TimePicker 
                 allowClear={false}
                 defaultValue={moment('12:08', 'mm:ss')}

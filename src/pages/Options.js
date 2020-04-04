@@ -28,11 +28,11 @@ const columns = [
     render: hostname => (
       <code>{hostname}</code>
     ),
-    width: 225,
+    width: 200,
     ellipsis: true,
   },
   {
-    title: 'Timeout',
+    title: 'Timeout interception',
     dataIndex: 'timeout',
     render: (timeout, site) => {
       
@@ -145,7 +145,7 @@ class Options extends React.Component {
         <Content style={{ padding: '20px 50px' }}>
           <Row type="flex" justify="center">
             <Col className="grid-col">
-              <h4 className="grid-col-title">Intercepted Websites</h4>
+              <h4 className="grid-col-title">Time-wasting Websites</h4>
               <Card className="grid-card">
                 <h4> Type in pages you feel like you spend a little too much time on here:</h4>
                 <Search autoFocus ref={this.addBlockedWebsiteInput}
@@ -159,6 +159,9 @@ class Options extends React.Component {
                       dataSource={this.state.blockedUrls.map(
                         (obj, key) => ({ ...obj, key })
                       )} />
+                <h4> 
+                  NB: The websites are not blocked, but they do require an exchange of time before you can enter.
+                </h4>
               </Card>
             </Col>
           </Row>
