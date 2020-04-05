@@ -171,7 +171,7 @@ class ExerciseOptions extends React.Component {
       <Divider />
       <Row>
         <h4 style={{ textAlign: 'center'}}>
-          Choose the length of your time exchange before entering a time-wasting website:
+          Choose the amount of time you want to exchange before entering a time-wasting website:
         </h4>
         <Col style={{ textAlign: 'center'}}>
           Minutes | Seconds

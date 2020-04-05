@@ -1,12 +1,8 @@
-html,
-body{
-  max-height: 50vh;
-}
-
 .Popup {
   text-align: center;
   background-color: #282c34;
-  min-height: 50vh;
+  height: 350px;
+  width: 250px;
   padding: 5px;
 }
 
@@ -26,13 +22,14 @@ body{
   text-align: left;
   border-top: 1px solid gray;
   color: white;
-  padding-top: 10px;
+  padding-top: 13px;
   padding-bottom: 13px;
 }
 
 .Popup-statistics-title{
   text-align: center;
   color: white;
+  padding-top: 7px;
 }
 
 .Popup-statistics{

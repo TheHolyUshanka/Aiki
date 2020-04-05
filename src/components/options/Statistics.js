@@ -18,7 +18,7 @@ const columns =[
     ellipsis: true
   },
   {
-    title: 'Intercepts',
+    title: 'Exchanges',
     dataIndex: 'value',
     key: 'value',
     sorter: (a, b) => a.value - b.value
@@ -75,7 +75,7 @@ class Statistics extends React.Component {
         
         {this.state.interceptsData.length !== 0 && (
         <Row>
-        <h4>Your most distracting sites are:</h4>
+        <h4>You can find your biggest time-wasters here - and all the others:</h4>
           <Col span = {15}>
             <PieChart width={300} height={300}>
                 <Pie dataKey="value" isAnimationActive={false}

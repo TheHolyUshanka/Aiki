@@ -2,7 +2,7 @@
 import React from 'react';
 import logo from '../images/aikido.png';
 import './Popup.css';
-import { Switch, Button, Row, Col } from 'antd';
+import { Switch, Button, Row, Col, Divider } from 'antd';
 import {
   blockCurrentWebsite,
   isCurrentWebsiteBlocked,
@@ -54,10 +54,18 @@ class Popup extends React.Component {
     });
   }
 
-  onSwitchChange(enabled) {
+  onSwitchChangeExtension(enabled) {
     this.setState({ enabled });
     setHistoricalFirebase({ enabled});
     setInStorage({ enabled });
+  }
+
+  onSwitchChangeWebsite(enabled) {
+    if(!enabled){
+      blockCurrentWebsite();
+    } else{
+      unBlockCurrentWebsite();
+    }
   }
 
   openOptionsPage() {
@@ -77,6 +85,16 @@ class Popup extends React.Component {
       return minutes + " min " + seconds + " sec";
     } else {
       return hours + " hours " + minutes + " min " + seconds + " sec";
+    }
+  }
+
+  textForCurrentSite(){
+    if(!this.state.currentBlocked)
+      return "Click to add the current site to the list:";
+    else if (this.state.currentBlocked){
+      return "Click to remove the current site from the list:";
+    } else {
+      return "";
     }
   }
 
@@ -104,36 +122,44 @@ class Popup extends React.Component {
           </Col>
         </Row>
         <Row className="Popup-body">
-          <Col className="Popup-statistics-title">
-            Intercepting:
+          <Col span={12}>
+            Aiki is overall:
           </Col>
-          <Col style={{ textAlign: 'center'}}>
+          <Col span={12} style={{ textAlign: 'right'}}>
             <Switch
                     loading={this.state.enabled === undefined}
                     checked={this.state.enabled}
-                    onChange={checked => this.onSwitchChange(checked)} 
+                    onChange={checked => this.onSwitchChangeExtension(checked)} 
                     checkedChildren="Enabled" 
                     unCheckedChildren="Disabled"/>
           </Col>
         </Row>   
         <Row className="Popup-body">
-          <Col className="Popup-statistics-title">
-            Total intercepts: 
+          <Col span={12}>
+            {this.textForCurrentSite()}  
           </Col>
-          <Col className="Popup-statistics">
-            {this.state.totalIntercepts}
+          <Col span={12} style={{ textAlign: 'right'}}>
+            <Switch
+                    checked={!this.state.currentBlocked}
+                    onChange={checked => this.onSwitchChangeWebsite(checked)} 
+                    checkedChildren="Add site" 
+                    unCheckedChildren="Remove site"/>
           </Col>         
         </Row>
-        <Row className="Popup-body">
-          <Col className="Popup-statistics-title">
+        <Row className="Popup-current">
+          <Col span={12} className="Popup-statistics-title">
+            Number of exchanges: 
+          </Col>
+          <Col span={12} className="Popup-statistics-title">
             Time spent learning:
           </Col>
-          <Col className="Popup-statistics">
+          <Col span={12} className="Popup-statistics">
+            {this.state.totalIntercepts}
+          </Col>
+          <Col span={12} className="Popup-statistics">
             {this.convertToMinutesAndSeconds()}
-          </Col>      
-        </Row>
-        <Row className="Popup-current">
-          <Col>
+          </Col>
+          {/* <Col>
             <Button ghost={this.state.currentBlocked}
               type="primary" onClick={() => {
                 !this.state.currentBlocked && blockCurrentWebsite();
@@ -141,7 +167,7 @@ class Popup extends React.Component {
               }}>
               {this.state.currentBlocked ? 'Don\'t intercept this' : 'Intercept this page'}
             </Button>
-          </Col>
+          </Col> */}
         </Row>      
       </div>
     );

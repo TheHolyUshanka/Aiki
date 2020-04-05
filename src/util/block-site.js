@@ -65,15 +65,15 @@ export const blockWebsite = async text => {
     await setInStorage({ blockedUrls });
 
     if (blocked.length > 1) {
-        message.success(`Blocked ${blocked.length} websites`);
+        message.success(`Added ${blocked.length} websites`);
         await setHistoricalFirebase({ blockedUrls});
     }
     else if (blocked.length === 1) {
-        message.success(`Blocked ${blocked[0].hostname}`);
+        message.success(`Added ${blocked[0].hostname}`);
         await setHistoricalFirebase({ blockedUrls});
     }
     else {
-        message.success(`${urls[0].hostname} is already blocked.`);
+        message.success(`${urls[0].hostname} is already added.`);
     }
 }
 
@@ -111,7 +111,7 @@ export const unblockWebsite = (hostname) => {
         
         setHistoricalFirebase({ blockedUrls});
         return setInStorage({ blockedUrls });
-    }).then(() => message.success(`Unblocked ${hostname}`));
+    }).then(() => message.success(`Removed ${hostname} from the list`));
 };
 
 export const setTimeout = async (url, timeout) => {
