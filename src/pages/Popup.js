@@ -2,7 +2,7 @@
 import React from 'react';
 import logo from '../images/aikido.png';
 import './Popup.css';
-import { Switch, Button, Row, Col, Divider } from 'antd';
+import { Switch, Button, Row, Col } from 'antd';
 import {
   blockCurrentWebsite,
   isCurrentWebsiteBlocked,
