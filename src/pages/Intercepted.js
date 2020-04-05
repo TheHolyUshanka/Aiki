@@ -19,6 +19,7 @@ class Intercepted extends React.Component {
       timer: null,
       exerciseSites: [],
       exerciseDuration: 0,
+      timeWastedDuration: 0,
       timeSpentLearningTemp: {},
       closeSuccess: false,
       skipTimeLeft: 4000,
@@ -69,15 +70,16 @@ class Intercepted extends React.Component {
 
     setup() {
         getFromStorage('intercepts', 'currentExerciseSite',
-                        'exerciseSites', 'exerciseDuration').then(res => {
+                        'exerciseSites', 'exerciseDuration', 'timeWastedDuration').then(res => {
             let currentExerciseSite = res.currentExerciseSite || 
                 defaultExerciseSite.name; // @FIXME dont assume.
             let exerciseSites = res.exerciseSites || defaultExerciseSites;
             let exerciseDuration = res.exerciseDuration || defaultexerciseDuration
             let timeLeft = exerciseDuration; // set initial time
+            let timeWastedDuration = res.timeWastedDuration || defaultTimeout;
 
             this.setState({ currentExerciseSite, exerciseSites,
-                            exerciseDuration, timeLeft });
+                            exerciseDuration, timeLeft, timeWastedDuration });
 
             let intercepts = res.intercepts || {};
             let parsed = parseUrl(this.getUrl());
@@ -146,7 +148,7 @@ class Intercepted extends React.Component {
         let url = parseUrl(this.getUrl());
         let now = new Date().valueOf();
 
-        setTimeout(url, now + defaultTimeout).then(() => {
+        setTimeout(url, now + this.state.timeWastedDuration).then(() => {
             window.location.href = url.href;
         });
     }
@@ -204,7 +206,7 @@ class Intercepted extends React.Component {
 
                             {this.state.timeLeft <= 0 &&
                                 <div>Well done! You earned&nbsp;
-                                {duration(defaultTimeout).humanize()}
+                                {duration(this.state.timeWastedDuration).humanize()}
                                 &nbsp;of browsing time.</div>
                             }
                         </Col>
@@ -212,50 +214,24 @@ class Intercepted extends React.Component {
                             <Button style={{ background: "#52c41a"}}
                                 type="primary" 
                                 icon="login"
-                                disabled={this.state.timeLeft > 0}
+                                loading={this.state.timeLeft > 0}
                                 onClick={() => this.onContinue()}
                                 >
                                 Continue to {url && url.name}
                             </Button>
-                        </Col>
-                        <Col justify="end" span={4} offset={20}>
-                            <Button
+                        <Col className="between-buttons">
+                            <Button className="skip-button"
                                 type="dashed"
                                 size="small"
-                                loading={this.state.skipTimeLeft > 0}
+                                disabled={this.state.skipTimeLeft > 0}
                                 onClick={() => this.onSkip()}
                                 >
                                 Emergency skip to {url && url.name}
                             </Button>
                         </Col>
-                    </Row>
-                    {/* <div style={{ backgroundColor: 'white',
-                        height: '100%', width: '100%', display: 'block' }}>
-                    </div> */}
-                </div>
-                {/* <div style={{ height: '10vh' }}>
-                    <Row type="flex" justify="space-around" align="middle">
-                        <Col sm={12} md={12}>
-                            <h3>Time left:</h3>
-                            <code>{timeLeftString}</code>
-                            <Progress percent={progressPercentage} />
-                            {this.state.timeLeft <= 0 &&
-                                <div>Well done! You earned&nbsp;
-                                {duration(this.state.exerciseDuration).humanize()}
-                                &nbsp;of browsing time.</div>
-                            }
-                        </Col>
-                        <Col sm={12} md={4}>
-                            <Button icon="login"
-                                disabled={this.state.timeLeft > 0}
-                                onClick={() => this.onContinue()}
-                                >
-                                Continue to {url && url.name}
-                            </Button>
                         </Col>
                     </Row>
-                </div> */}
-                
+                </div>                
             </div>
         );
     }

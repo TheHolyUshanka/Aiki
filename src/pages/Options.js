@@ -28,11 +28,11 @@ const columns = [
     render: hostname => (
       <code>{hostname}</code>
     ),
-    width: 200,
+    width: 185,
     ellipsis: true,
   },
   {
-    title: 'Timeout interception',
+    title: 'Timeout from exchanges',
     dataIndex: 'timeout',
     render: (timeout, site) => {
       
@@ -81,7 +81,7 @@ const columns = [
     }
   },
   {
-    title: 'Remove interception',
+    title: 'Remove website from the list',
     dataIndex: 'hostname',
     render: hostname => (
       <Button type="link" shape="circle" icon="close"

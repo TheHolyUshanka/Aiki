@@ -1,6 +1,6 @@
 import React from 'react';
 import { addStorageListener, getFromStorage, setInStorage, setHistoricalFirebase } from '../../util/storage';
-import { defaultExerciseSite, defaultExerciseSites, defaultexerciseDuration, s2 } from '../../util/constants';
+import { defaultExerciseSite, defaultExerciseSites, defaultexerciseDuration, s2, defaultTimeout } from '../../util/constants';
 import { addExerciseSite, parseUrls, removeExerciseSite } from '../../util/block-site';
 import { Row, Col, Input, Divider, TimePicker, Icon, Select, Button, Modal } from 'antd';
 import moment from 'moment';
@@ -17,6 +17,7 @@ class ExerciseOptions extends React.Component {
     currentExerciseSite: '',
     exerciseSites: [],
     exerciseDuration: 0,
+    timeWastedDuration: 0,
     addSiteModalVisible: false,
     newExerciseSiteUrl: '',
     newExerciseSite: null
@@ -28,14 +29,15 @@ class ExerciseOptions extends React.Component {
   }
 
   setup() {
-    getFromStorage('currentExerciseSite', 'exerciseSites', 'exerciseDuration')
+    getFromStorage('currentExerciseSite', 'exerciseSites', 'exerciseDuration', 'timeWastedDuration')
       .then(res => {
         let currentExerciseSite = res.currentExerciseSite || defaultExerciseSite.name;
         let exerciseSites = res.exerciseSites || defaultExerciseSites;
         let exerciseDuration = res.exerciseDuration || defaultexerciseDuration;
+        let timeWastedDuration = res.timeWastedDuration || defaultTimeout;
         if (exerciseSites.length === 0) currentExerciseSite = '';
 
-      this.setState({ currentExerciseSite, exerciseSites, exerciseDuration });
+      this.setState({ currentExerciseSite, exerciseSites, exerciseDuration, timeWastedDuration });
     });
   }
 
@@ -52,6 +54,14 @@ class ExerciseOptions extends React.Component {
     setHistoricalFirebase({ exerciseDuration });
     setInStorage({ exerciseDuration }).then(() => {
       this.setState({ exerciseDuration });
+    });
+  }
+
+  setTimeWastingDuration(time) {
+    const timeWastedDuration = time.valueOf();
+    setHistoricalFirebase({ timeWastedDuration });
+    setInStorage({ timeWastedDuration }).then(() => {
+      this.setState({ timeWastedDuration });
     });
   }
 
@@ -171,12 +181,21 @@ class ExerciseOptions extends React.Component {
       <Divider />
       <Row>
         <h4 style={{ textAlign: 'center'}}>
-          Choose the amount of time you want to exchange before entering a time-wasting website:
+          Choose the amount of time you want to spent on exercises there after on time-wasting website:
         </h4>
-        <Col style={{ textAlign: 'center'}}>
+        <Col span={12} style={{ textAlign: 'center'}}>
+          Time on Exercise website:
+        </Col>
+        <Col span={12} style={{ textAlign: 'center'}}>
+          Time on the time-wasting website: 
+        </Col>
+        <Col span={12} style={{ textAlign: 'center'}}>
           Minutes | Seconds
         </Col>
-        <Col style={{ textAlign: 'center'}}>
+        <Col span={12} style={{ textAlign: 'center'}}>
+          Minutes | Seconds
+        </Col>
+        <Col span={12} style={{ textAlign: 'center'}}>
             <TimePicker 
                 allowClear={false}
                 defaultValue={moment('12:08', 'mm:ss')}
@@ -185,6 +204,16 @@ class ExerciseOptions extends React.Component {
                 suffixIcon={<Icon type="hourglass" />}
                 format={'mm:ss'}
                 onChange={time => this.setExerciseDuration(time)} />
+        </Col>
+        <Col span={12} style={{ textAlign: 'center'}}>
+            <TimePicker 
+                allowClear={false}
+                defaultValue={moment('12:08', 'mm:ss')}
+                value={moment(this.state.timeWastedDuration)}
+                secondStep={5}
+                suffixIcon={<Icon type="hourglass" />}
+                format={'mm:ss'}
+                onChange={time => this.setTimeWastingDuration(time)} />
         </Col>
       </Row> 
       </>

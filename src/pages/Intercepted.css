@@ -17,14 +17,10 @@
     position: fixed;
     display: flex;
     bottom: -4px;
-    width: 98%;
+    width: 99%;
     z-index: 999;
-    height: 100px;
+    height: 110px;
     transition: all .2s;
-}
-
-.status-footer:hover {
-    height: 100px;
 }
 
 .status-bar {
@@ -43,4 +39,12 @@
     height: 100%;
     background: white;
     padding-top: 15px;
+}
+
+.between-buttons {
+    padding-top: 15px;
+}
+
+.skip-button {
+    opacity:0.6
 }
