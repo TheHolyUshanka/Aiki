@@ -215,8 +215,8 @@ class Intercepted extends React.Component {
                             <Button className="success-button"
                                 type="primary" 
                                 icon="login"
-                                loading={this.state.timeLeft > 0}
                                 disabled={this.state.timeLeft > 0}
+                                loading={this.state.timeLeft > 0}
                                 onClick={() => this.onContinue()}
                                 >
                                 Continue to  { name } 
