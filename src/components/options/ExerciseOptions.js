@@ -117,7 +117,7 @@ class ExerciseOptions extends React.Component {
       <>
       <Row>
         <h4 style={{ textAlign: 'center'}}>
-          Choose your exercise website for the exchanged time here:
+          Your language praticing portal:
         </h4>
         <Col style={{ textAlign: 'center' }}>
           <Select
@@ -179,23 +179,17 @@ class ExerciseOptions extends React.Component {
         </Col>
       </Row>
       <Divider />
-      <Row>
+      <Row justify="space-between" align="bottom">
         <h4 style={{ textAlign: 'center'}}>
-          Choose the amount of time you want to spent on exercises there after on time-wasting website:
+          Choose the amount of time you want to spend practising:
         </h4>
-        <Col span={12} style={{ textAlign: 'center'}}>
-          Time on Exercise website:
-        </Col>
-        <Col span={12} style={{ textAlign: 'center'}}>
-          Time on the time-wasting website: 
-        </Col>
-        <Col span={12} style={{ textAlign: 'center'}}>
+        <Col style={{ textAlign: 'end'}}>
           Minutes | Seconds
         </Col>
-        <Col span={12} style={{ textAlign: 'center'}}>
-          Minutes | Seconds
+        <Col span={12} style={{ textAlign: 'start'}}>
+          Time on learning:
         </Col>
-        <Col span={12} style={{ textAlign: 'center'}}>
+        <Col span={12} style={{ textAlign: 'end', paddingBottom: 10}}>
             <TimePicker 
                 allowClear={false}
                 defaultValue={moment('12:08', 'mm:ss')}
@@ -205,7 +199,10 @@ class ExerciseOptions extends React.Component {
                 format={'mm:ss'}
                 onChange={time => this.setExerciseDuration(time)} />
         </Col>
-        <Col span={12} style={{ textAlign: 'center'}}>
+        <Col span={12} style={{ textAlign: 'start'}}>
+          Time you get on your "blocked" website in exchange: 
+        </Col>
+        <Col span={12} style={{ textAlign: 'end'}}>
             <TimePicker 
                 allowClear={false}
                 defaultValue={moment('12:08', 'mm:ss')}

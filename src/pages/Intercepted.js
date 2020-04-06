@@ -155,6 +155,7 @@ class Intercepted extends React.Component {
 
     render() {
         let url = parseUrl(this.getUrl());
+        let name = url && url.name
         let site = this.getExerciseSite();
         let progressPercentage = 100 - Math.round(
             (
@@ -211,13 +212,14 @@ class Intercepted extends React.Component {
                             }
                         </Col>
                         <Col span={6}>
-                            <Button style={{ background: "#52c41a"}}
+                            <Button className="success-button"
                                 type="primary" 
                                 icon="login"
                                 loading={this.state.timeLeft > 0}
+                                disabled={this.state.timeLeft > 0}
                                 onClick={() => this.onContinue()}
                                 >
-                                Continue to {url && url.name}
+                                Continue to  { name } 
                             </Button>
                         <Col className="between-buttons">
                             <Button className="skip-button"
@@ -226,7 +228,7 @@ class Intercepted extends React.Component {
                                 disabled={this.state.skipTimeLeft > 0}
                                 onClick={() => this.onSkip()}
                                 >
-                                Emergency skip to {url && url.name}
+                                Emergency skip to { name } 
                             </Button>
                         </Col>
                         </Col>

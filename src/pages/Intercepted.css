@@ -46,5 +46,10 @@
 }
 
 .skip-button {
-    opacity:0.4
+    opacity:0.4;
+}
+
+.success-button {
+    background: #52c41a;
+    border: #52c41a;
 }

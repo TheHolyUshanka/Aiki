@@ -160,7 +160,7 @@ class Options extends React.Component {
                         (obj, key) => ({ ...obj, key })
                       )} />
                 <h4> 
-                  NB: The websites are not blocked, but they do require an exchange of time before you can enter.
+                  NB: You can still use these websites, Aiki is only suggesting you spend a little time learning each time.
                 </h4>
               </Card>
             </Col>
