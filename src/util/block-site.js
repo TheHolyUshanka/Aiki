@@ -65,15 +65,15 @@ export const blockWebsite = async text => {
     await setInStorage({ blockedUrls });
 
     if (blocked.length > 1) {
-        message.success(`Enabled on ${blocked.length} websites`);
+        message.success(`${blocked.length} are now considered time-wasting sites`);
         await setHistoricalFirebase({ blockedUrls});
     }
     else if (blocked.length === 1) {
-        message.success(`Enabled on ${blocked[0].hostname}`);
+        message.success(`${blocked[0].hostname} is now considered a time-wasting site`);
         await setHistoricalFirebase({ blockedUrls});
     }
     else {
-        message.success(`${urls[0].hostname} is already on.`);
+        message.success(`${urls[0].hostname} is already a time-wasting site`);
     }
 }
 
@@ -111,7 +111,7 @@ export const unblockWebsite = (hostname) => {
         
         setHistoricalFirebase({ blockedUrls});
         return setInStorage({ blockedUrls });
-    }).then(() => message.success(`Disabled on ${hostname}`));
+    }).then(() => message.success(`${hostname} is no longer a time-wasting site`));
 };
 
 export const setTimeout = async (url, timeout) => {

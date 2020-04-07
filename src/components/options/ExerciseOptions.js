@@ -117,7 +117,7 @@ class ExerciseOptions extends React.Component {
       <>
       <Row>
         <h4 style={{ textAlign: 'center'}}>
-          Your language praticing portal:
+          Your language learning portal:
         </h4>
         <Col style={{ textAlign: 'center' }}>
           <Select
@@ -183,7 +183,7 @@ class ExerciseOptions extends React.Component {
       <Divider />
       <Row justify="space-between" align="bottom">
         <h4 style={{ textAlign: 'center'}}>
-          Choose the amount of time you want to spend practicing:
+          Choose the amount of time you want to spend learning:
         </h4>
         <Col style={{ textAlign: 'end'}}>
           Minutes | Seconds
@@ -191,7 +191,7 @@ class ExerciseOptions extends React.Component {
         <Col span={12} style={{ textAlign: 'start'}}>
           Time on learning:
         </Col>
-        <Col span={12} style={{ textAlign: 'end', paddingBottom: 10}}>
+        <Col span={12} style={{ textAlign: 'end'}}>
             <TimePicker 
                 allowClear={false}
                 defaultValue={moment('12:08', 'mm:ss')}
@@ -201,10 +201,10 @@ class ExerciseOptions extends React.Component {
                 format={'mm:ss'}
                 onChange={time => this.setExerciseDuration(time)} />
         </Col>
-        <Col span={12} style={{ textAlign: 'start'}}>
-          Time you get on your "blocked" website in exchange: 
+        <Col span={8} style={{ textAlign: 'start'}}>
+          Time you get on your time-wasting site in exchange: 
         </Col>
-        <Col span={12} style={{ textAlign: 'end'}}>
+        <Col span={12} offset={4} style={{ textAlign: 'end', paddingTop: 10}}>
             <TimePicker 
                 allowClear={false}
                 defaultValue={moment('12:08', 'mm:ss')}

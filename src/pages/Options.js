@@ -167,7 +167,7 @@ class Options extends React.Component {
           </Row>
           <Row type="flex" justify="center">
             <Col className="grid-col">
-              <h4 className="grid-col-title">Time exchange settings</h4>
+              <h4 className="grid-col-title">Language learning settings</h4>
               <Card className="grid-card">
                 <ExerciseOptions />
               </Card>

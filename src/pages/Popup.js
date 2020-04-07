@@ -90,9 +90,9 @@ class Popup extends React.Component {
 
   textForCurrentSite(){
     if(!this.state.currentBlocked)
-      return "Enable on the current site:";
+      return "Is this a time-wasting site?";
     else if (this.state.currentBlocked){
-      return "Disenable on the current site:";
+      return "Is this a time-wasting site?";
     } else {
       return "";
     }
@@ -112,7 +112,7 @@ class Popup extends React.Component {
           </Row>
         </header>
         <Row className="Popup-body">
-          <Col span={12}>
+          <Col span={12} className="Popup-settings">
             Settings:
           </Col>
           <Col span={8} offset={4} style={{ textAlign: 'center'}}>
@@ -123,32 +123,32 @@ class Popup extends React.Component {
         </Row>
         <Row className="Popup-body">
           <Col span={12} >
-            The overall status:
+            Status of extension:
           </Col>
-          <Col span={12} style={{ textAlign: 'right'}}>
+          <Col span={8} offset={4} className="Popup-slider" style={{ textAlign: 'center'}}>
             <Switch
                     loading={this.state.enabled === undefined}
                     checked={this.state.enabled}
                     onChange={checked => this.onSwitchChangeExtension(checked)} 
-                    checkedChildren="Enabled" 
-                    unCheckedChildren="Disabled"/>
+                    checkedChildren="On" 
+                    unCheckedChildren="Off"/>
           </Col>
         </Row>   
         <Row className="Popup-body">
           <Col span={12}>
             {this.textForCurrentSite()}
           </Col>
-          <Col span={12} className="Popup-current-button" style={{ textAlign: 'right'}} >
+          <Col span={8} offset={4} className="Popup-slider" style={{ textAlign: 'center'}} >
             <Switch
-                    checked={!this.state.currentBlocked}
-                    onChange={checked => this.onSwitchChangeWebsite(checked)} 
-                    checkedChildren="Enabled" 
-                    unCheckedChildren="Disabled"/>
+                    checked={this.state.currentBlocked}
+                    onChange={checked => this.onSwitchChangeWebsite(!checked)} 
+                    checkedChildren="No" 
+                    unCheckedChildren="Yes"/>
           </Col>         
         </Row>
         <Row className="Popup-body">
           <Col span={12} className="Popup-statistics-title">
-            Number of exchanges: 
+            Number of language sessions: 
           </Col>
           <Col span={8} offset={4} className="Popup-statistics">
             {this.state.totalIntercepts}
