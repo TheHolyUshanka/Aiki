@@ -181,7 +181,7 @@ class ExerciseOptions extends React.Component {
       <Divider />
       <Row justify="space-between" align="bottom">
         <h4 style={{ textAlign: 'center'}}>
-          Choose the amount of time you want to spend practising:
+          Choose the amount of time you want to spend practicing:
         </h4>
         <Col style={{ textAlign: 'end'}}>
           Minutes | Seconds

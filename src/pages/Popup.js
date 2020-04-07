@@ -90,9 +90,9 @@ class Popup extends React.Component {
 
   textForCurrentSite(){
     if(!this.state.currentBlocked)
-      return "Click to add the current site to the list:";
+      return "Enable on the current site:";
     else if (this.state.currentBlocked){
-      return "Click to remove the current site from the list:";
+      return "Disenable on the current site:";
     } else {
       return "";
     }
@@ -112,7 +112,7 @@ class Popup extends React.Component {
           </Row>
         </header>
         <Row className="Popup-body">
-          <Col span={4}>
+          <Col span={12} style={{ textAlign: 'center'}}>
             Settings:
           </Col>
           <Col style={{ textAlign: 'right'}}>
@@ -122,8 +122,8 @@ class Popup extends React.Component {
           </Col>
         </Row>
         <Row className="Popup-body">
-          <Col span={12}>
-            Aiki is overall:
+          <Col span={12} style={{ textAlign: 'center'}}>
+            The overall status:
           </Col>
           <Col span={12} style={{ textAlign: 'right'}}>
             <Switch
@@ -135,15 +135,15 @@ class Popup extends React.Component {
           </Col>
         </Row>   
         <Row className="Popup-body">
-          <Col span={12}>
-            {this.textForCurrentSite()}  
+          <Col span={12} style={{ textAlign: 'center'}}>
+            {this.textForCurrentSite()}
           </Col>
           <Col span={12} style={{ textAlign: 'right'}}>
             <Switch
                     checked={!this.state.currentBlocked}
                     onChange={checked => this.onSwitchChangeWebsite(checked)} 
-                    checkedChildren="Add site" 
-                    unCheckedChildren="Remove site"/>
+                    checkedChildren="Enabled" 
+                    unCheckedChildren="Disabled"/>
           </Col>         
         </Row>
         <Row className="Popup-current">
