@@ -3,7 +3,7 @@ import moment, { duration } from 'moment';
 import React from 'react';
 import ExerciseOptions from '../components/options/ExerciseOptions';
 import Statistics from '../components/options/Statistics';
-import { blockWebsite, setTimeout, unblockWebsite, isCurrentWebsiteAiki } from '../util/block-site';
+import { blockWebsite, setTimeout, unblockWebsite } from '../util/block-site';
 import { defaultTimeoutInterval, s2 } from '../util/constants';
 import { addStorageListener, getFromStorage } from '../util/storage';
 import './Options.css';
