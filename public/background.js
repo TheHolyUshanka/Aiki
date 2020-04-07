@@ -5,17 +5,6 @@ let BACKGROUND_CACHE = {
     blockedUrls: [] // default value
 };
 
-function getRandomToken() {
-    // E.g. 8 * 32 = 256 bits token
-    var randomPool = new Uint8Array(32);
-    crypto.getRandomValues(randomPool);
-    var hex = '';
-    for (var i = 0; i < randomPool.length; ++i) {
-        hex += randomPool[i].toString(16);
-    }
-    return hex;
-}
-
 // When installed, show settings page
 chrome.runtime.onInstalled.addListener(function (details) {
     if (details.reason === "chrome_update") {
@@ -29,6 +18,17 @@ chrome.runtime.onInstalled.addListener(function (details) {
         return chrome.tabs.create({"url": "index.html?page=options" });
     }
 });
+
+function getRandomToken() {
+    // E.g. 8 * 32 = 256 bits token
+    var randomPool = new Uint8Array(32);
+    crypto.getRandomValues(randomPool);
+    var hex = '';
+    for (var i = 0; i < randomPool.length; ++i) {
+        hex += randomPool[i].toString(16);
+    }
+    return hex;
+}
 
 chrome.storage.onChanged.addListener(changes => {
     setup();

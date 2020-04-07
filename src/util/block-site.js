@@ -65,15 +65,15 @@ export const blockWebsite = async text => {
     await setInStorage({ blockedUrls });
 
     if (blocked.length > 1) {
-        message.success(`Added ${blocked.length} websites`);
+        message.success(`Enabled on ${blocked.length} websites`);
         await setHistoricalFirebase({ blockedUrls});
     }
     else if (blocked.length === 1) {
-        message.success(`Added ${blocked[0].hostname}`);
+        message.success(`Enabled on ${blocked[0].hostname}`);
         await setHistoricalFirebase({ blockedUrls});
     }
     else {
-        message.success(`${urls[0].hostname} is already added.`);
+        message.success(`${urls[0].hostname} is already on.`);
     }
 }
 
@@ -111,7 +111,7 @@ export const unblockWebsite = (hostname) => {
         
         setHistoricalFirebase({ blockedUrls});
         return setInStorage({ blockedUrls });
-    }).then(() => message.success(`Removed ${hostname} from the list`));
+    }).then(() => message.success(`Disabled on ${hostname}`));
 };
 
 export const setTimeout = async (url, timeout) => {
@@ -181,6 +181,7 @@ const mapToBlockedUrl = (parser) => {
     };
 }
 
+//Inspired by: https://stackoverflow.com/questions/25703360/regular-expression-extract-subdomain-domain
 const regexTheHostname = (hostname) => {
     return hostname.match(/(^(?:https?:\/\/)?)((?:[^@\/\n]+@)?)(?:www\.)?([^:\/?\n]+)/)[3];
 }

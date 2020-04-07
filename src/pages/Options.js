@@ -3,7 +3,7 @@ import moment, { duration } from 'moment';
 import React from 'react';
 import ExerciseOptions from '../components/options/ExerciseOptions';
 import Statistics from '../components/options/Statistics';
-import { blockWebsite, setTimeout, unblockWebsite } from '../util/block-site';
+import { blockWebsite, setTimeout, unblockWebsite, isCurrentWebsiteAiki } from '../util/block-site';
 import { defaultTimeoutInterval, s2 } from '../util/constants';
 import { addStorageListener, getFromStorage } from '../util/storage';
 import './Options.css';
@@ -32,7 +32,7 @@ const columns = [
     ellipsis: true,
   },
   {
-    title: 'Timeout from exchanges',
+    title: 'Temporarily disable',
     dataIndex: 'timeout',
     render: (timeout, site) => {
       
@@ -131,7 +131,7 @@ class Options extends React.Component {
         <Header>
             <Col span={12}>
               <header className="Options-header">
-                Aiki 
+                Aiki
               </header>
             </Col>
             <Col span={11} offset={1}>
