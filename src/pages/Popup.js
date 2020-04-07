@@ -112,17 +112,17 @@ class Popup extends React.Component {
           </Row>
         </header>
         <Row className="Popup-body">
-          <Col span={12} style={{ textAlign: 'center'}}>
+          <Col span={12}>
             Settings:
           </Col>
-          <Col style={{ textAlign: 'right'}}>
+          <Col span={8} offset={4} style={{ textAlign: 'center'}}>
             <Button type="default" shape="circle" icon="setting"
               onClick={() => this.openOptionsPage()}
             />
           </Col>
         </Row>
         <Row className="Popup-body">
-          <Col span={12} style={{ textAlign: 'center'}}>
+          <Col span={12} >
             The overall status:
           </Col>
           <Col span={12} style={{ textAlign: 'right'}}>
@@ -135,10 +135,10 @@ class Popup extends React.Component {
           </Col>
         </Row>   
         <Row className="Popup-body">
-          <Col span={12} style={{ textAlign: 'center'}}>
+          <Col span={12}>
             {this.textForCurrentSite()}
           </Col>
-          <Col span={12} style={{ textAlign: 'right'}}>
+          <Col span={12} className="Popup-current-button" style={{ textAlign: 'right'}} >
             <Switch
                     checked={!this.state.currentBlocked}
                     onChange={checked => this.onSwitchChangeWebsite(checked)} 
@@ -146,17 +146,19 @@ class Popup extends React.Component {
                     unCheckedChildren="Disabled"/>
           </Col>         
         </Row>
-        <Row className="Popup-current">
+        <Row className="Popup-body">
           <Col span={12} className="Popup-statistics-title">
             Number of exchanges: 
           </Col>
+          <Col span={8} offset={4} className="Popup-statistics">
+            {this.state.totalIntercepts}
+          </Col>
+        </Row> 
+        <Row className="Popup-bottom">
           <Col span={12} className="Popup-statistics-title">
             Time spent learning:
           </Col>
-          <Col span={12} className="Popup-statistics">
-            {this.state.totalIntercepts}
-          </Col>
-          <Col span={12} className="Popup-statistics">
+          <Col span={12} className="Popup-statistics-time">
             {this.convertToMinutesAndSeconds()}
           </Col>
           {/* <Col>

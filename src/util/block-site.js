@@ -181,6 +181,7 @@ const mapToBlockedUrl = (parser) => {
     };
 }
 
+//Inspired by: https://stackoverflow.com/questions/25703360/regular-expression-extract-subdomain-domain
 const regexTheHostname = (hostname) => {
     return hostname.match(/(^(?:https?:\/\/)?)((?:[^@\/\n]+@)?)(?:www\.)?([^:\/?\n]+)/)[3];
 }

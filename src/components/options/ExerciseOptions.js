@@ -122,6 +122,8 @@ class ExerciseOptions extends React.Component {
         <Col style={{ textAlign: 'center' }}>
           <Select
             value={this.state.currentExerciseSite}
+            disabled="true"
+            showArrow={false}
             style={{ width: 170 }}
             onChange={(e) => this.setCurrentExerciseSite(e)}
           >
@@ -136,7 +138,7 @@ class ExerciseOptions extends React.Component {
               }
             )}
           </Select><br/>
-          <Button ghost 
+          {/* <Button ghost 
             onClick={() => this.setAddSiteModalVisible(true)}
             style={{ margin:'5px', color: '#40a9ff' }}>
             Add
@@ -175,7 +177,7 @@ class ExerciseOptions extends React.Component {
                       alt='favicon'
                       src={`${s2}${this.state.newExerciseSite.hostname}`} />
                   }/>
-          </Modal>
+          </Modal> */}
         </Col>
       </Row>
       <Divider />

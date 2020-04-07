@@ -22,22 +22,32 @@
   text-align: left;
   border-top: 1px solid gray;
   color: white;
-  padding-top: 13px;
-  padding-bottom: 13px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .Popup-statistics-title{
-  text-align: center;
+  text-align: start;
   color: white;
-  padding-top: 7px;
 }
 
 .Popup-statistics{
   text-align: center;
   color: greenyellow;
+  padding-top: 20px;
 }
 
-.Popup-current{
+.Popup-statistics-time{
+  text-align: end;
+  color: greenyellow;
+  padding-top: 20px;
+}
+
+.Popup-current-button{
+  padding-top: 15px
+}
+
+.Popup-bottom{
   border-top: 1px solid gray;
   color: white;
   padding-top: 10px;
