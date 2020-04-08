@@ -88,16 +88,6 @@ class Popup extends React.Component {
     }
   }
 
-  textForCurrentSite(){
-    if(!this.state.currentBlocked)
-      return "Is this a time-wasting site?";
-    else if (this.state.currentBlocked){
-      return "Is this a time-wasting site?";
-    } else {
-      return "";
-    }
-  }
-
   render() {
     return (
       <div className="Popup">
@@ -112,20 +102,20 @@ class Popup extends React.Component {
           </Row>
         </header>
         <Row className="Popup-body">
-          <Col span={12} className="Popup-settings">
+          <Col span={14} className="Popup-settings">
             Settings:
           </Col>
-          <Col span={8} offset={4} style={{ textAlign: 'center'}}>
+          <Col span={10} style={{ textAlign: 'center'}}>
             <Button type="default" shape="circle" icon="setting"
               onClick={() => this.openOptionsPage()}
             />
           </Col>
         </Row>
         <Row className="Popup-body">
-          <Col span={12} >
+          <Col span={14} >
             Status of extension:
           </Col>
-          <Col span={8} offset={4} className="Popup-slider" style={{ textAlign: 'center'}}>
+          <Col span={10} className="Popup-slider" style={{ textAlign: 'center'}}>
             <Switch
                     loading={this.state.enabled === undefined}
                     checked={this.state.enabled}
@@ -135,41 +125,32 @@ class Popup extends React.Component {
           </Col>
         </Row>   
         <Row className="Popup-body">
-          <Col span={12}>
-            {this.textForCurrentSite()}
+          <Col span={14}>
+            Enable on this site:
           </Col>
-          <Col span={8} offset={4} className="Popup-slider" style={{ textAlign: 'center'}} >
+          <Col span={10} className="Popup-slider" style={{ textAlign: 'center'}} >
             <Switch
                     checked={this.state.currentBlocked}
                     onChange={checked => this.onSwitchChangeWebsite(!checked)} 
-                    checkedChildren="No" 
-                    unCheckedChildren="Yes"/>
+                    checkedChildren="Yes" 
+                    unCheckedChildren="No"/>
           </Col>         
         </Row>
         <Row className="Popup-body">
-          <Col span={12} className="Popup-statistics-title">
-            Number of language sessions: 
+          <Col span={14} className="Popup-statistics-title">
+            Study sessions: 
           </Col>
-          <Col span={8} offset={4} className="Popup-statistics">
+          <Col span={10} className="Popup-statistics">
             {this.state.totalIntercepts}
           </Col>
         </Row> 
-        <Row className="Popup-bottom">
-          <Col span={12} className="Popup-statistics-title">
-            Time spent learning:
+        <Row className="Popup-body-bottom">
+          <Col span={14} className="Popup-statistics-title">
+            Total study time:
           </Col>
-          <Col span={12} className="Popup-statistics-time">
+          <Col span={10} className="Popup-statistics">
             {this.convertToMinutesAndSeconds()}
           </Col>
-          {/* <Col>
-            <Button ghost={this.state.currentBlocked}
-              type="primary" onClick={() => {
-                !this.state.currentBlocked && blockCurrentWebsite();
-                this.state.currentBlocked && unBlockCurrentWebsite();
-              }}>
-              {this.state.currentBlocked ? 'Don\'t intercept this' : 'Intercept this page'}
-            </Button>
-          </Col> */}
         </Row>      
       </div>
     );

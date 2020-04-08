@@ -1,8 +1,8 @@
 .Popup {
   text-align: center;
   background-color: #282c34;
-  height: 363px;
-  width: 250px;
+  min-height: 100vh;
+  min-width: 250px;
   padding: 5px;
 }
 
@@ -19,11 +19,19 @@
 }
 
 .Popup-body{
-  text-align: left;
+  text-align: right;
   border-top: 1px solid gray;
   color: white;
   padding-top: 10px;
   padding-bottom: 10px;
+}
+
+.Popup-body-bottom{
+  text-align: right;
+  border-top: 1px solid gray;
+  color: white;
+  padding-top: 10px;
+  padding-bottom: 30px;
 }
 
 .Popup-settings {
@@ -31,30 +39,13 @@
 }
 
 .Popup-statistics-title{
-  text-align: start;
+  text-align: right;
   color: white;
 }
 
 .Popup-statistics{
   text-align: center;
   color: greenyellow;
-  padding-top: 13px;
-}
-
-.Popup-statistics-time{
-  text-align: end;
-  color: greenyellow;
-  padding-top: 13px;
-}
-
-.Popup-slider{
-  padding-top: 13px
-}
-
-.Popup-bottom{
-  border-top: 1px solid gray;
-  color: white;
-  padding-top: 10px;
 }
 
 .Popup-link {
