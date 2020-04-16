@@ -23,7 +23,8 @@ class Intercepted extends React.Component {
       timeSpentLearningTemp: {},
       closeSuccess: false,
       skipTimeLeft: 4000,
-      skipped: false
+      skipped: false,
+      initialTimeStamp: 0
     }
 
     componentDidMount() {
@@ -77,9 +78,10 @@ class Intercepted extends React.Component {
             let exerciseDuration = res.exerciseDuration || defaultexerciseDuration
             let timeLeft = exerciseDuration; // set initial time
             let timeWastedDuration = res.timeWastedDuration || defaultTimeout;
+            let initialTimeStamp = new Date().getTime();
 
             this.setState({ currentExerciseSite, exerciseSites,
-                            exerciseDuration, timeLeft, timeWastedDuration });
+                            exerciseDuration, timeLeft, timeWastedDuration, initialTimeStamp });
 
             let intercepts = res.intercepts || {};
             let parsed = parseUrl(this.getUrl());
@@ -96,23 +98,27 @@ class Intercepted extends React.Component {
         window.addEventListener('beforeunload', (event) => {
             event.preventDefault();
 
-            if(this.state.timeLeft <= 0){
-                getFromStorage('timeSpentLearning').then(res => {
-                    let timeSpentLearning = res.timeSpentLearning || {};
-                    let site = this.getExerciseSite();
-                    let timestamp = new Date().getTime();
-                    let timePassed = timestamp - this.state.timestamp;
-    
-                    if (!site) return; // not found, do not update.
-    
-                    let newExerciseTimeSpent = timeSpentLearning[site.name]
-                                                    + timePassed || timePassed;
-                    timeSpentLearning[site.name] = newExerciseTimeSpent;
-    
-                    this.setState({timeSpentLearningTemp: timeSpentLearning});
-                    
-                    return setInStorage({ timeSpentLearning });
-                });
+            let timestamp = new Date().getTime();
+            let lessThanAnHour = timestamp - this.state.initialTimeStamp;
+
+            if(this.state.timeLeft <= 0 && lessThanAnHour < 3600000){
+                if(document.hasFocus()){
+                    getFromStorage('timeSpentLearning').then(res => {
+                        let timeSpentLearning = res.timeSpentLearning || {};
+                        let site = this.getExerciseSite();
+                        let timePassed = timestamp - this.state.timestamp;
+        
+                        if (!site) return; // not found, do not update.
+        
+                        let newExerciseTimeSpent = timeSpentLearning[site.name]
+                                                        + timePassed || timePassed;
+                        timeSpentLearning[site.name] = newExerciseTimeSpent;
+        
+                        this.setState({timeSpentLearningTemp: timeSpentLearning});
+                        
+                        return setInStorage({ timeSpentLearning });
+                    });
+                }
                 if(!this.state.closeSuccess){
                     this.onContinue();
                 }
