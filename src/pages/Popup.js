@@ -12,7 +12,7 @@ import {
   getFromStorage,
   setInStorage,
   addStorageListener,
-  setHistoricalFirebase
+  setInFirebase
 } from '../util/storage';
 
 class Popup extends React.Component {
@@ -56,7 +56,7 @@ class Popup extends React.Component {
 
   onSwitchChangeExtension(enabled) {
     this.setState({ enabled });
-    setHistoricalFirebase({ enabled});
+    setInFirebase({ enabled});
     setInStorage({ enabled });
   }
 
@@ -126,7 +126,7 @@ class Popup extends React.Component {
         </Row>   
         <Row className="Popup-body">
           <Col span={14}>
-            Enable on this site:
+            Enabled on this site:
           </Col>
           <Col span={10} className="Popup-slider" style={{ textAlign: 'center'}} >
             <Switch

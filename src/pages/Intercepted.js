@@ -1,6 +1,6 @@
 import React from 'react';
 import { Progress, message, Icon, Row, Col, Button, Empty } from 'antd';
-import { getFromStorage, setInStorage, setHistoricalFirebase } from '../util/storage';
+import { getFromStorage, setInStorage, setInFirebase } from '../util/storage';
 import {
     defaultExerciseSite,
     defaultExerciseSites,
@@ -24,7 +24,8 @@ class Intercepted extends React.Component {
       closeSuccess: false,
       skipTimeLeft: 4000,
       skipped: false,
-      initialTimeStamp: 0
+      countedTime: 0,
+      countTimer: null
     }
 
     componentDidMount() {
@@ -65,8 +66,15 @@ class Intercepted extends React.Component {
 
             this.setState({ timeLeft, timestamp, skipTimeLeft });
         }, 1000);
+
+        let countTimer = setInterval(() => {
+            if(document.hasFocus() && this.state.timeLeft <= 0){
+                let countedTime = this.state.countedTime + 1000;
+                this.setState({ countedTime });
+            }
+        }, 1000);
         
-        this.setState({ timer });
+        this.setState({ timer, countTimer });
     }
 
     setup() {
@@ -78,10 +86,9 @@ class Intercepted extends React.Component {
             let exerciseDuration = res.exerciseDuration || defaultexerciseDuration
             let timeLeft = exerciseDuration; // set initial time
             let timeWastedDuration = res.timeWastedDuration || defaultTimeout;
-            let initialTimeStamp = new Date().getTime();
 
             this.setState({ currentExerciseSite, exerciseSites,
-                            exerciseDuration, timeLeft, timeWastedDuration, initialTimeStamp });
+                            exerciseDuration, timeLeft, timeWastedDuration });
 
             let intercepts = res.intercepts || {};
             let parsed = parseUrl(this.getUrl());
@@ -91,40 +98,34 @@ class Intercepted extends React.Component {
             let count = intercepts[parsed.hostname] + 1 || 1;
             intercepts[parsed.hostname] = count;
 
-            setHistoricalFirebase({ intercepts });
+            setInFirebase({ intercepts });
             return setInStorage({ intercepts });
         });
         
         window.addEventListener('beforeunload', (event) => {
             event.preventDefault();
 
-            let timestamp = new Date().getTime();
-            let lessThanAnHour = timestamp - this.state.initialTimeStamp;
-
-            if(this.state.timeLeft <= 0 && lessThanAnHour < 3600000){
-                if(document.hasFocus()){
-                    getFromStorage('timeSpentLearning').then(res => {
-                        let timeSpentLearning = res.timeSpentLearning || {};
-                        let site = this.getExerciseSite();
-                        let timePassed = timestamp - this.state.timestamp;
-        
-                        if (!site) return; // not found, do not update.
-        
-                        let newExerciseTimeSpent = timeSpentLearning[site.name]
-                                                        + timePassed || timePassed;
-                        timeSpentLearning[site.name] = newExerciseTimeSpent;
-        
-                        this.setState({timeSpentLearningTemp: timeSpentLearning});
-                        
-                        return setInStorage({ timeSpentLearning });
-                    });
-                }
+            if(this.state.timeLeft <= 0){
+                getFromStorage('timeSpentLearning').then(res => {
+                    let timeSpentLearning = res.timeSpentLearning || {};
+                    let site = this.getExerciseSite();
+    
+                    if (!site) return; // not found, do not update.
+    
+                    let newExerciseTimeSpent = timeSpentLearning[site.name]
+                                                    + this.state.countedTime || this.state.countedTime;
+                    timeSpentLearning[site.name] = newExerciseTimeSpent;
+    
+                    this.setState({timeSpentLearningTemp: timeSpentLearning});
+                    
+                    return setInStorage({ timeSpentLearning });
+                });
                 if(!this.state.closeSuccess){
                     this.onContinue();
                 }
             }
                         
-            return setHistoricalFirebase(this.state.timeSpentLearningTemp); 
+            return setInFirebase(this.state.timeSpentLearningTemp); 
         });
     }
 
@@ -141,13 +142,13 @@ class Intercepted extends React.Component {
 
     onContinue() {
         this.timeout();
-        setHistoricalFirebase('Succes');
+        setInFirebase('Succes');
         this.setState({closeSuccess: true});
     }
 
     onSkip(){
         this.timeout();
-        setHistoricalFirebase('Skipped');
+        setInFirebase('Skipped');
     }
 
     timeout(){

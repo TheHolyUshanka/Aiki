@@ -11,7 +11,7 @@ export const defaultExerciseSites = [
   },
   {
     "hostname": "www.zeeguu.org",
-    "href": "https://www.zeeguu.org/read/",
+    "href": "http://zeeguu.org/aiki",
     "pathname": "/",
     "regex": "*://*.www.zeeguu.org/*",
     "tld": "org",

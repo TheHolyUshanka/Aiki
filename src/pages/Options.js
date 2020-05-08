@@ -147,7 +147,7 @@ class Options extends React.Component {
             <Col className="grid-col">
               <h4 className="grid-col-title">Time-wasting Websites</h4>
               <Card className="grid-card">
-                <h4> Type in pages you feel like you spend a little too much time on here:</h4>
+                <h4> Type in pages you feel like you spend a little too much time on here (e.g. facebook.com, reddit.com):</h4>
                 <Search autoFocus ref={this.addBlockedWebsiteInput}
                       placeholder="Type the url here..." 
                       enterButton="Add"

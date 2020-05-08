@@ -1,5 +1,5 @@
 import React from 'react';
-import { addStorageListener, getFromStorage, setInStorage, setHistoricalFirebase } from '../../util/storage';
+import { addStorageListener, getFromStorage, setInStorage, setInFirebase } from '../../util/storage';
 import { defaultExerciseSite, defaultExerciseSites, defaultexerciseDuration, s2, defaultTimeout } from '../../util/constants';
 import { addExerciseSite, parseUrls, removeExerciseSite } from '../../util/block-site';
 import { Row, Col, Input, Divider, TimePicker, Icon, Select, Button, Modal } from 'antd';
@@ -42,7 +42,7 @@ class ExerciseOptions extends React.Component {
   }
 
   setCurrentExerciseSite(currentExerciseSite) {
-    setHistoricalFirebase({ currentExerciseSite});
+    setInFirebase({ currentExerciseSite});
     setInStorage({ currentExerciseSite }).then(() => {
       this.setState({ currentExerciseSite });
     });
@@ -51,7 +51,7 @@ class ExerciseOptions extends React.Component {
   // time is a moment object
   setExerciseDuration(time) {
     const exerciseDuration = time.valueOf();
-    setHistoricalFirebase({ exerciseDuration });
+    setInFirebase({ exerciseDuration });
     setInStorage({ exerciseDuration }).then(() => {
       this.setState({ exerciseDuration });
     });
@@ -59,7 +59,7 @@ class ExerciseOptions extends React.Component {
 
   setTimeWastingDuration(time) {
     const timeWastedDuration = time.valueOf();
-    setHistoricalFirebase({ timeWastedDuration });
+    setInFirebase({ timeWastedDuration });
     setInStorage({ timeWastedDuration }).then(() => {
       this.setState({ timeWastedDuration });
     });

@@ -19,6 +19,8 @@ chrome.runtime.onInstalled.addListener(function (details) {
     }
 });
 
+
+//Source: https://stackoverflow.com/questions/23822170/getting-unique-clientid-from-chrome-extension
 function getRandomToken() {
     // E.g. 8 * 32 = 256 bits token
     var randomPool = new Uint8Array(32);

@@ -3,7 +3,7 @@ import { message } from 'antd';
 import Autolinker from 'autolinker';
 import UrlParser from 'url-parse';
 import parseDomain from 'parse-domain';
-import { getFromStorage, setInStorage, setHistoricalFirebase } from './storage';
+import { getFromStorage, setInStorage, setInFirebase } from './storage';
 import { defaultExerciseSites } from './constants';
 
 export async function getWebsites() {
@@ -66,11 +66,11 @@ export const blockWebsite = async text => {
 
     if (blocked.length > 1) {
         message.success(`${blocked.length} are now considered time-wasting sites`);
-        await setHistoricalFirebase({ blockedUrls});
+        await setInFirebase({ blockedUrls});
     }
     else if (blocked.length === 1) {
         message.success(`${blocked[0].hostname} is now considered a time-wasting site`);
-        await setHistoricalFirebase({ blockedUrls});
+        await setInFirebase({ blockedUrls});
     }
     else {
         message.success(`${urls[0].hostname} is already a time-wasting site`);
@@ -91,7 +91,7 @@ export const addExerciseSite = async url => {
         message.error('Duplicate exercise site name');
     }
     
-    await setHistoricalFirebase({ exerciseSites });
+    await setInFirebase({ exerciseSites });
     await setInStorage({ exerciseSites });
 }
 
@@ -100,7 +100,7 @@ export const removeExerciseSite = async name => {
     let exerciseSites = res.exerciseSites || defaultExerciseSites;
     exerciseSites = exerciseSites.filter(site => site.name !== name);
     
-    await setHistoricalFirebase({ exerciseSites });
+    await setInFirebase({ exerciseSites });
     await setInStorage({ exerciseSites });
 }
 
@@ -109,7 +109,7 @@ export const unblockWebsite = (hostname) => {
         let blockedUrls = oldBlockedUrls.filter(blockedUrl =>
             blockedUrl.hostname !== hostname);
         
-        setHistoricalFirebase({ blockedUrls});
+        setInFirebase({ blockedUrls});
         return setInStorage({ blockedUrls });
     }).then(() => message.success(`${hostname} is no longer a time-wasting site`));
 };
@@ -126,7 +126,7 @@ export const setTimeout = async (url, timeout) => {
         return blockedUrl;
     });
     let doa = url.hostname;
-    setHistoricalFirebase({ [doa]: timeout});
+    setInFirebase({ [doa]: timeout});
     return setInStorage({ blockedUrls });
 };
 
