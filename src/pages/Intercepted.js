@@ -28,13 +28,13 @@ class Intercepted extends React.Component {
       countTimer: null
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         message.open({
             content: "Let's do something useful before having fun!",
             icon: <Icon type="smile" />
         });
 
-        this.setup();
+        await this.setup();
 
         let timer = setInterval(() => {
             let timestamp = new Date().getTime();
@@ -49,7 +49,7 @@ class Intercepted extends React.Component {
             if (timeLeft <= 0) clearInterval(this.state.timer)
 
             // update time spent learning on website
-            getFromStorage('timeSpentLearning').then(res => {
+            getFromStorage('timeSpentLearning').then(async res => {
                 let timeSpentLearning = res.timeSpentLearning || {};
                 let site = this.getExerciseSite();
 
@@ -77,7 +77,7 @@ class Intercepted extends React.Component {
         this.setState({ timer, countTimer });
     }
 
-    setup() {
+    async setup() {
         getFromStorage('intercepts', 'currentExerciseSite',
                         'exerciseSites', 'exerciseDuration', 'timeWastedDuration').then(res => {
             let currentExerciseSite = res.currentExerciseSite || 

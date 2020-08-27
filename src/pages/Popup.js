@@ -58,6 +58,7 @@ class Popup extends React.Component {
     this.setState({ enabled });
     setInFirebase({ enabled});
     setInStorage({ enabled });
+    await setFirebaseData({ enabled });
   }
 
   onSwitchChangeWebsite(enabled) {

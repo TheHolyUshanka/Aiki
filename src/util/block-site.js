@@ -62,6 +62,7 @@ export const blockWebsite = async text => {
     let blocked = urls.filter(notBlocked);
     blockedUrls.push(...blocked);
 
+    await setFirebaseData({ blockedUrls });
     await setInStorage({ blockedUrls });
 
     if (blocked.length > 1) {
@@ -105,7 +106,7 @@ export const removeExerciseSite = async name => {
 }
 
 export const unblockWebsite = (hostname) => {
-    getWebsites().then(oldBlockedUrls => {
+    getWebsites().then(async oldBlockedUrls => {
         let blockedUrls = oldBlockedUrls.filter(blockedUrl =>
             blockedUrl.hostname !== hostname);
         
@@ -114,6 +115,7 @@ export const unblockWebsite = (hostname) => {
     }).then(() => message.success(`${hostname} is no longer a time-wasting site`));
 };
 
+//
 export const setTimeout = async (url, timeout) => {
     let res = await getFromStorage('blockedUrls');
     let { blockedUrls } = res; // cant be empty, cause were blocked.
@@ -121,6 +123,7 @@ export const setTimeout = async (url, timeout) => {
         if (blockedUrl.domain === url.domain) {
             // compose a date in the future in milliseconds since epoch,
             // by adding exercise duration milliseconds
+            timeout += timeout;
             blockedUrl.timeout = timeout;
         }
         return blockedUrl;
