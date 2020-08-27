@@ -5,6 +5,33 @@ let BACKGROUND_CACHE = {
     blockedUrls: [] // default value
 };
 
+// When installed, show settings page
+chrome.runtime.onInstalled.addListener(function (details) {
+    if (details.reason === "chrome_update") {
+        return void 0;
+    } else if (details.reason === "install") {
+        var userid = getRandomToken();
+        chrome.storage.sync.set({
+            "userid": userid,
+            "firstRun": true 
+        });
+        return chrome.tabs.create({"url": "index.html?page=options" });
+    }
+});
+
+
+//Source: https://stackoverflow.com/questions/23822170/getting-unique-clientid-from-chrome-extension
+function getRandomToken() {
+    // E.g. 8 * 32 = 256 bits token
+    var randomPool = new Uint8Array(32);
+    crypto.getRandomValues(randomPool);
+    var hex = '';
+    for (var i = 0; i < randomPool.length; ++i) {
+        hex += randomPool[i].toString(16);
+    }
+    return hex;
+}
+
 chrome.storage.onChanged.addListener(changes => {
     setup();
 

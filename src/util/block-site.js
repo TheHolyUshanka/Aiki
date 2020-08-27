@@ -3,7 +3,7 @@ import { message } from 'antd';
 import Autolinker from 'autolinker';
 import UrlParser from 'url-parse';
 import parseDomain from 'parse-domain';
-import { getFromStorage, setInStorage, setFirebaseData } from './storage';
+import { getFromStorage, setInStorage, setInFirebase } from './storage';
 import { defaultExerciseSites } from './constants';
 
 export async function getWebsites() {
@@ -27,7 +27,7 @@ export const unBlockCurrentWebsite = () => {
 
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         let tab = tabs[0];
-        let hostname = new UrlParser(tab.url).hostname;
+        let hostname = regexTheHostname(new UrlParser(tab.url).hostname);
         unblockWebsite(hostname);
     });
 }
@@ -38,7 +38,7 @@ export const isCurrentWebsiteBlocked = () => {
 
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
             let tab = tabs[0];
-            let hostname = new UrlParser(tab.url).hostname;
+            let hostname = regexTheHostname(new UrlParser(tab.url).hostname);
             isWebsiteBlocked(hostname).then(resolve);
         });
     });
@@ -57,7 +57,7 @@ export const blockWebsite = async text => {
     const blockedUrls = await getWebsites();
     
     let notBlocked = url => {
-        return !blockedUrls.find(blocked => blocked.regex === url.regex);
+        return !blockedUrls.find(blocked => blocked.hostname === url.hostname);
     };
     let blocked = urls.filter(notBlocked);
     blockedUrls.push(...blocked);
@@ -66,13 +66,15 @@ export const blockWebsite = async text => {
     await setInStorage({ blockedUrls });
 
     if (blocked.length > 1) {
-        message.success(`Blocked ${blocked.length} websites`);
+        message.success(`${blocked.length} are now considered time-wasting sites`);
+        await setInFirebase({ blockedUrls});
     }
     else if (blocked.length === 1) {
-        message.success(`Blocked ${blocked[0].hostname}`);
+        message.success(`${blocked[0].hostname} is now considered a time-wasting site`);
+        await setInFirebase({ blockedUrls});
     }
     else {
-        message.success(`${urls[0].hostname} is already blocked.`);
+        message.success(`${urls[0].hostname} is already a time-wasting site`);
     }
 }
 
@@ -89,7 +91,8 @@ export const addExerciseSite = async url => {
     } else {
         message.error('Duplicate exercise site name');
     }
-    await setFirebaseData({ exerciseSites });
+    
+    await setInFirebase({ exerciseSites });
     await setInStorage({ exerciseSites });
 }
 
@@ -97,7 +100,8 @@ export const removeExerciseSite = async name => {
     const res = await getFromStorage('exerciseSites');
     let exerciseSites = res.exerciseSites || defaultExerciseSites;
     exerciseSites = exerciseSites.filter(site => site.name !== name);
-    await setFirebaseData({ exerciseSites });
+    
+    await setInFirebase({ exerciseSites });
     await setInStorage({ exerciseSites });
 }
 
@@ -105,9 +109,10 @@ export const unblockWebsite = (hostname) => {
     getWebsites().then(async oldBlockedUrls => {
         let blockedUrls = oldBlockedUrls.filter(blockedUrl =>
             blockedUrl.hostname !== hostname);
-        await setFirebaseData({ blockedUrls });
+        
+        setInFirebase({ blockedUrls});
         return setInStorage({ blockedUrls });
-    }).then(() => message.success(`Unblocked ${hostname}`));
+    }).then(() => message.success(`${hostname} is no longer a time-wasting site`));
 };
 
 //
@@ -123,7 +128,8 @@ export const setTimeout = async (url, timeout) => {
         }
         return blockedUrl;
     });
-    await setFirebaseData({ blockedUrls });
+    let doa = url.hostname;
+    setInFirebase({ [doa]: timeout});
     return setInStorage({ blockedUrls });
 };
 
@@ -167,7 +173,8 @@ const urlToParser = (match) => {
 
 const mapToBlockedUrl = (parser) => {
     let regex = `*://*.${parser.hostname}/*`;
-    let { hostname, href, pathname } = parser;
+    let hostname = regexTheHostname(parser.hostname);
+    let { href, pathname } = parser;
 
     return {
         hostname,
@@ -175,4 +182,9 @@ const mapToBlockedUrl = (parser) => {
         pathname,
         regex
     };
+}
+
+//Inspired by: https://stackoverflow.com/questions/25703360/regular-expression-extract-subdomain-domain
+const regexTheHostname = (hostname) => {
+    return hostname.match(/(^(?:https?:\/\/)?)((?:[^@\/\n]+@)?)(?:www\.)?([^:\/?\n]+)/)[3];
 }

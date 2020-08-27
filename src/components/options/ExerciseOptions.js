@@ -1,6 +1,6 @@
 import React from 'react';
-import { addStorageListener, getFromStorage, setInStorage, setFirebaseData } from '../../util/storage';
-import { defaultExerciseSite, defaultExerciseSites, defaultexerciseDuration, s2 } from '../../util/constants';
+import { addStorageListener, getFromStorage, setInStorage, setInFirebase } from '../../util/storage';
+import { defaultExerciseSite, defaultExerciseSites, defaultexerciseDuration, s2, defaultTimeout } from '../../util/constants';
 import { addExerciseSite, parseUrls, removeExerciseSite } from '../../util/block-site';
 import { Row, Col, Input, Divider, TimePicker, Icon, Select, Button, Modal } from 'antd';
 import moment from 'moment';
@@ -17,6 +17,7 @@ class ExerciseOptions extends React.Component {
     currentExerciseSite: '',
     exerciseSites: [],
     exerciseDuration: 0,
+    timeWastedDuration: 0,
     addSiteModalVisible: false,
     newExerciseSiteUrl: '',
     newExerciseSite: null
@@ -28,18 +29,20 @@ class ExerciseOptions extends React.Component {
   }
 
   setup() {
-    getFromStorage('currentExerciseSite', 'exerciseSites', 'exerciseDuration')
-      .then(async res => {
+    getFromStorage('currentExerciseSite', 'exerciseSites', 'exerciseDuration', 'timeWastedDuration')
+      .then(res => {
         let currentExerciseSite = res.currentExerciseSite || defaultExerciseSite.name;
         let exerciseSites = res.exerciseSites || defaultExerciseSites;
         let exerciseDuration = res.exerciseDuration || defaultexerciseDuration;
+        let timeWastedDuration = res.timeWastedDuration || defaultTimeout;
         if (exerciseSites.length === 0) currentExerciseSite = '';
 
-      this.setState({ currentExerciseSite, exerciseSites, exerciseDuration });
+      this.setState({ currentExerciseSite, exerciseSites, exerciseDuration, timeWastedDuration });
     });
   }
 
-  async setCurrentExerciseSite(currentExerciseSite) {
+  setCurrentExerciseSite(currentExerciseSite) {
+    setInFirebase({ currentExerciseSite});
     setInStorage({ currentExerciseSite }).then(() => {
       this.setState({ currentExerciseSite });
     });
@@ -51,11 +54,20 @@ class ExerciseOptions extends React.Component {
   // time is a moment object
   async setExerciseDuration(time) {
     const exerciseDuration = time.valueOf();
+    setInFirebase({ exerciseDuration });
     setInStorage({ exerciseDuration }).then(() => {
       this.setState({ exerciseDuration });
     });
     await setFirebaseData({ exerciseDuration }).then(() => {
       this.setState({ exerciseDuration });
+    });
+  }
+
+  setTimeWastingDuration(time) {
+    const timeWastedDuration = time.valueOf();
+    setInFirebase({ timeWastedDuration });
+    setInStorage({ timeWastedDuration }).then(() => {
+      this.setState({ timeWastedDuration });
     });
   }
 
@@ -110,12 +122,14 @@ class ExerciseOptions extends React.Component {
     return (
       <>
       <Row>
-        <Col span={8}>
-          Current exercise website
-        </Col>
-        <Col span={16} style={{ textAlign: 'right' }}>
+        <h4 style={{ textAlign: 'center'}}>
+          Your language learning portal:
+        </h4>
+        <Col style={{ textAlign: 'center' }}>
           <Select
             value={this.state.currentExerciseSite}
+            disabled="true"
+            showArrow={false}
             style={{ width: 170 }}
             onChange={(e) => this.setCurrentExerciseSite(e)}
           >
@@ -130,7 +144,7 @@ class ExerciseOptions extends React.Component {
               }
             )}
           </Select><br/>
-          <Button ghost 
+          {/* <Button ghost 
             onClick={() => this.setAddSiteModalVisible(true)}
             style={{ margin:'5px', color: '#40a9ff' }}>
             Add
@@ -169,18 +183,21 @@ class ExerciseOptions extends React.Component {
                       alt='favicon'
                       src={`${s2}${this.state.newExerciseSite.hostname}`} />
                   }/>
-          </Modal>
+          </Modal> */}
         </Col>
       </Row>
       <Divider />
-      <Row>
-        <Col span={24} style={{ textAlign: 'right'}}>
+      <Row justify="space-between" align="bottom">
+        <h4 style={{ textAlign: 'center'}}>
+          Choose the amount of time you want to spend learning:
+        </h4>
+        <Col style={{ textAlign: 'end'}}>
           Minutes | Seconds
         </Col>
-        <Col span={6}>
-          Exercise duration
+        <Col span={12} style={{ textAlign: 'start'}}>
+          Time on learning:
         </Col>
-        <Col span={18} style={{ textAlign: 'right' }}>
+        <Col span={12} style={{ textAlign: 'end'}}>
             <TimePicker 
                 allowClear={false}
                 defaultValue={moment('12:08', 'mm:ss')}
@@ -190,7 +207,20 @@ class ExerciseOptions extends React.Component {
                 format={'mm:ss'}
                 onChange={time => this.setExerciseDuration(time)} />
         </Col>
-      </Row>
+        <Col span={8} style={{ textAlign: 'start'}}>
+          Time you get on your time-wasting site in exchange: 
+        </Col>
+        <Col span={12} offset={4} style={{ textAlign: 'end', paddingTop: 10}}>
+            <TimePicker 
+                allowClear={false}
+                defaultValue={moment('12:08', 'mm:ss')}
+                value={moment(this.state.timeWastedDuration)}
+                secondStep={5}
+                suffixIcon={<Icon type="hourglass" />}
+                format={'mm:ss'}
+                onChange={time => this.setTimeWastingDuration(time)} />
+        </Col>
+      </Row> 
       </>
     )
   }

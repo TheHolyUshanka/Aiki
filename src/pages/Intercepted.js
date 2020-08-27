@@ -1,10 +1,11 @@
 import React from 'react';
 import { Progress, message, Icon, Row, Col, Button, Empty } from 'antd';
-import { getFromStorage, setInStorage, setFirebaseData } from '../util/storage';
+import { getFromStorage, setInStorage, setInFirebase } from '../util/storage';
 import {
     defaultExerciseSite,
     defaultExerciseSites,
-    defaultexerciseDuration
+    defaultexerciseDuration,
+    defaultTimeout
 } from '../util/constants';
 import { parseUrl, setTimeout } from '../util/block-site';
 import { duration } from 'moment';
@@ -17,7 +18,14 @@ class Intercepted extends React.Component {
       timestamp: new Date().getTime(),
       timer: null,
       exerciseSites: [],
-      exerciseDuration: 0
+      exerciseDuration: 0,
+      timeWastedDuration: 0,
+      timeSpentLearningTemp: {},
+      closeSuccess: false,
+      skipTimeLeft: 4000,
+      skipped: false,
+      countedTime: 0,
+      countTimer: null
     }
 
     async componentDidMount() {
@@ -34,8 +42,10 @@ class Intercepted extends React.Component {
 
             if (!document.hasFocus()) timePassed = 0;
 
+            let skipTimeLeft = this.state.skipTimeLeft - timePassed;
+
             let timeLeft = this.state.timeLeft - timePassed;
-            
+
             if (timeLeft <= 0) clearInterval(this.state.timer)
 
             // update time spent learning on website
@@ -48,26 +58,37 @@ class Intercepted extends React.Component {
                 let newExerciseTimeSpent = timeSpentLearning[site.name]
                                                 + timePassed || timePassed;
                 timeSpentLearning[site.name] = newExerciseTimeSpent;
-                await setFirebaseData({ timeSpentLearning });
-                return setInStorage({ timeSpentLearning });
-            });
 
-            this.setState({ timeLeft, timestamp });
+                this.setState({timeSpentLearningTemp: timeSpentLearning});
+                
+                return setInStorage({ timeSpentLearning });
+            }); 
+
+            this.setState({ timeLeft, timestamp, skipTimeLeft });
         }, 1000);
-        this.setState({ timer });
+
+        let countTimer = setInterval(() => {
+            if(document.hasFocus() && this.state.timeLeft <= 0){
+                let countedTime = this.state.countedTime + 1000;
+                this.setState({ countedTime });
+            }
+        }, 1000);
+        
+        this.setState({ timer, countTimer });
     }
 
     async setup() {
         getFromStorage('intercepts', 'currentExerciseSite',
-                        'exerciseSites', 'exerciseDuration').then( async res => {
+                        'exerciseSites', 'exerciseDuration', 'timeWastedDuration').then(res => {
             let currentExerciseSite = res.currentExerciseSite || 
                 defaultExerciseSite.name; // @FIXME dont assume.
             let exerciseSites = res.exerciseSites || defaultExerciseSites;
             let exerciseDuration = res.exerciseDuration || defaultexerciseDuration
             let timeLeft = exerciseDuration; // set initial time
+            let timeWastedDuration = res.timeWastedDuration || defaultTimeout;
 
             this.setState({ currentExerciseSite, exerciseSites,
-                            exerciseDuration, timeLeft });
+                            exerciseDuration, timeLeft, timeWastedDuration });
 
             let intercepts = res.intercepts || {};
             let parsed = parseUrl(this.getUrl());
@@ -76,9 +97,35 @@ class Intercepted extends React.Component {
             
             let count = intercepts[parsed.hostname] + 1 || 1;
             intercepts[parsed.hostname] = count;
-            
-            await setFirebaseData({ intercepts });
+
+            setInFirebase({ intercepts });
             return setInStorage({ intercepts });
+        });
+        
+        window.addEventListener('beforeunload', (event) => {
+            event.preventDefault();
+
+            if(this.state.timeLeft <= 0){
+                getFromStorage('timeSpentLearning').then(res => {
+                    let timeSpentLearning = res.timeSpentLearning || {};
+                    let site = this.getExerciseSite();
+    
+                    if (!site) return; // not found, do not update.
+    
+                    let newExerciseTimeSpent = timeSpentLearning[site.name]
+                                                    + this.state.countedTime || this.state.countedTime;
+                    timeSpentLearning[site.name] = newExerciseTimeSpent;
+    
+                    this.setState({timeSpentLearningTemp: timeSpentLearning});
+                    
+                    return setInStorage({ timeSpentLearning });
+                });
+                if(!this.state.closeSuccess){
+                    this.onContinue();
+                }
+            }
+                        
+            return setInFirebase(this.state.timeSpentLearningTemp); 
         });
     }
 
@@ -94,16 +141,28 @@ class Intercepted extends React.Component {
     }
 
     onContinue() {
+        this.timeout();
+        setInFirebase('Succes');
+        this.setState({closeSuccess: true});
+    }
+
+    onSkip(){
+        this.timeout();
+        setInFirebase('Skipped');
+    }
+
+    timeout(){
         let url = parseUrl(this.getUrl());
         let now = new Date().valueOf();
 
-        setTimeout(url, now + this.state.exerciseDuration).then(() => {
+        setTimeout(url, now + this.state.timeWastedDuration).then(() => {
             window.location.href = url.href;
         });
     }
 
     render() {
         let url = parseUrl(this.getUrl());
+        let name = url && url.name
         let site = this.getExerciseSite();
         let progressPercentage = 100 - Math.round(
             (
@@ -139,60 +198,49 @@ class Intercepted extends React.Component {
                             percent={progressPercentage}
                             size="small"
                             showInfo={false}
-                            strokeWidth={4}
+                            strokeWidth={5}
                             />
                     </Row>
                     <Row
                         className="status-overlay">
-                        <Col span={12} offset={4}>
+                        <Col span={14} offset={4}>
+                            {this.state.timeLeft > 0 &&
                             <div>Time left: &nbsp;
                                 <small>
                                     <code>{timeLeftString}</code>
                                 </small>
                             </div>
-                            
-                            {this.state.timeLeft <= 0 &&
-                                <div>Well done! You earned &nbsp;
-                                {duration(this.state.exerciseDuration*10).humanize()}
-                                &nbsp; of browsing time.</div>
                             }
-                        </Col>
-                        <Col span={6}>
-                            <Button icon="login"
-                                disabled={this.state.timeLeft > 0}
-                                onClick={() => this.onContinue()}
-                                >
-                                Continue to {url && url.name}
-                            </Button>
-                        </Col>
-                    </Row>
-                    {/* <div style={{ backgroundColor: 'white',
-                        height: '100%', width: '100%', display: 'block' }}>
-                    </div> */}
-                </div>
-                {/* <div style={{ height: '10vh' }}>
-                    <Row type="flex" justify="space-around" align="middle">
-                        <Col sm={12} md={12}>
-                            <h3>Time left:</h3>
-                            <code>{timeLeftString}</code>
-                            <Progress percent={progressPercentage} />
+
                             {this.state.timeLeft <= 0 &&
                                 <div>Well done! You earned&nbsp;
-                                {duration(this.state.exerciseDuration).humanize()}
+                                {duration(this.state.timeWastedDuration).humanize()}
                                 &nbsp;of browsing time.</div>
                             }
                         </Col>
-                        <Col sm={12} md={4}>
-                            <Button icon="login"
+                        <Col span={6}>
+                            <Button className="success-button"
+                                type="primary" 
+                                icon="login"
                                 disabled={this.state.timeLeft > 0}
+                                loading={this.state.timeLeft > 0}
                                 onClick={() => this.onContinue()}
                                 >
-                                Continue to {url && url.name}
+                                Continue to  { name } 
+                            </Button>
+                        <Col className="between-buttons">
+                            <Button className="skip-button"
+                                type="dashed"
+                                size="small"
+                                disabled={this.state.skipTimeLeft > 0}
+                                onClick={() => this.onSkip()}
+                                >
+                                Emergency skip to { name } 
                             </Button>
                         </Col>
+                        </Col>
                     </Row>
-                </div> */}
-                
+                </div>                
             </div>
         );
     }

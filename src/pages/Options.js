@@ -1,17 +1,18 @@
-import { Button, Card, Col, Icon, Input, Layout, Row, Switch, Table, Tag } from 'antd';
+import { Button, Card, Col, Input, Layout, Row, Switch, Table, Tag } from 'antd';
 import moment, { duration } from 'moment';
 import React from 'react';
 import ExerciseOptions from '../components/options/ExerciseOptions';
 import Statistics from '../components/options/Statistics';
 import { blockWebsite, setTimeout, unblockWebsite } from '../util/block-site';
-import { defaultTimeout, defaultTimeoutInterval, s2 } from '../util/constants';
-import { addStorageListener, getFromStorage, firstTimeRunStorage } from '../util/storage';
+import { defaultTimeoutInterval, s2 } from '../util/constants';
+import { addStorageListener, getFromStorage } from '../util/storage';
 import './Options.css';
 const { Header, Content, Footer } = Layout;
 
 let b = false;
 const columns = [
   {
+    title: 'Page Name',
     dataIndex: 'name',
     render: (name, site) => (
       <div>
@@ -19,14 +20,20 @@ const columns = [
         {name}
       </div>
     ),
+    width: 150,
+    ellipsis: true, 
   },
   {
-    dataIndex: 'regex',
-    render: regex => (
-      <code>{regex}</code>
-    )
+    title: 'Page Url',
+    dataIndex: 'hostname',
+    render: hostname => (
+      <code>{hostname}</code>
+    ),
+    width: 185,
+    ellipsis: true,
   },
   {
+    title: 'Temporarily disable',
     dataIndex: 'timeout',
     render: (timeout, site) => {
       
@@ -35,35 +42,39 @@ const columns = [
       
       let timedout = timeout && start.isSameOrBefore(end);
       
-      const timeLeftStr = end.from(start, true);
       const tillStr = end.format('HH:mm');
+
+      const defTiInt = defaultTimeoutInterval / 60 / 1000;
       
       let now = new Date().valueOf();
       
       return (
         <div style={{ display: 'flex' }}>
-          <Switch size="small" checked={timedout}
+          <Switch size="small" 
+            checked={timedout}
             onChange={checked => 
-              setTimeout(site, checked ? now + defaultTimeout : now)
+              setTimeout(site, checked ? now + defaultTimeoutInterval : now)
             }
-            style={{ marginRight: '5px' }} />
+            style={{ marginRight: '5px' }}
+            title="Toggle timeout of blockade" />
           {timedout === true && (
             <>
               <small style={{ display: 'flex', flexDirection: 'column' }}>
-                For {timeLeftStr}
                 <Tag color="blue" style={{
                   borderColor: 'transparent',
                   backgroundColor: 'transparent'
-                }} >
-                  Till {tillStr}
+                }} title = {"Timed out untill " + tillStr } >
+                  Untill {tillStr}
                 </Tag>
               </small>
               <Button icon="minus" size="small" type="link"
                 style={{ color: '#8c8c8c' }}
-                onClick={() => setTimeout(site, timeout - defaultTimeoutInterval)} />
+                onClick={() => setTimeout(site, timeout - defaultTimeoutInterval)} 
+                title = {"Minus "+ defTiInt + " minutes to the timeout"}/>
               <Button icon="plus" size="small" type="link"
                 style={{ color: '#8c8c8c' }}
-                onClick={() => setTimeout(site, timeout + defaultTimeoutInterval)} />
+                onClick={() => setTimeout(site, timeout + defaultTimeoutInterval)} 
+                title = {"Add "+ defTiInt + " minutes to the timeout"}/>
             </>
           )}
         </div>
@@ -71,12 +82,13 @@ const columns = [
     }
   },
   {
+    title: 'Remove website from the list',
     dataIndex: 'hostname',
     render: hostname => (
       <Button type="link" shape="circle" icon="close"
         onClick={() => unblockWebsite(hostname)}
         className="remove-button"
-        title="Delete website"/>
+        title="Remove interception"/>
     ),
     align: 'right'
   },
@@ -108,10 +120,9 @@ class Options extends React.Component {
     });
   }
   
-  didAddBlockedWebsite(e) {
-    let url = e.target.getAttribute('value');
-    this.addBlockedWebsiteInput.current.setValue('');
-    blockWebsite(url);
+  didAddBlockedWebsite(url) {
+   this.addBlockedWebsiteInput.current.input.setValue('');
+   blockWebsite(url);
   }
 
   renderLabel({ value }) {
@@ -119,34 +130,49 @@ class Options extends React.Component {
   }
 
   render() {
+    const Search = Input.Search;
     return (
       <Layout style={{ background: 'rgb(248, 249, 250)' }}>
         <Header>
-          <header className="Options-header">
-            Distraction Shield
-          </header>
+            <Col span={12}>
+              <header className="Options-header">
+                Aiki
+              </header>
+            </Col>
+            <Col span={11} offset={1}>
+            <header className="Options-subheader">
+              <i> 
+                Exchange your procrastination into microlearnings 
+              </i>
+            </header>
+            </Col>
         </Header>
         <Content style={{ padding: '20px 50px' }}>
           <Row type="flex" justify="center">
             <Col className="grid-col">
-              <h4 className="grid-col-title">Blocked Websites</h4>
+              <h4 className="grid-col-title">Time-wasting Websites</h4>
               <Card className="grid-card">
-                <Input autoFocus ref={this.addBlockedWebsiteInput}
-                      placeholder="Block url..." 
-                      onPressEnter={(e) => this.didAddBlockedWebsite(e)}
+                <h4> Type in pages you feel like you spend a little too much time on here (e.g. facebook.com, reddit.com):</h4>
+                <Search autoFocus ref={this.addBlockedWebsiteInput}
+                      placeholder="Type the url here..." 
+                      enterButton="Add"
+                      onSearch={(e) => this.didAddBlockedWebsite(e)}
                       className='block-button'
-                      prefix={<Icon type="stop" style={{ color: 'rgba(0,0,0,.25)' }} />}/>
+                      borderColor='black'/>
+            
                 <Table columns={columns}
                       dataSource={this.state.blockedUrls.map(
                         (obj, key) => ({ ...obj, key })
-                      )} 
-                      showHeader={false} />
+                      )} />
+                <h4> 
+                  NB: You can still use these websites, Aiki is only suggesting you spend a little time learning each time.
+                </h4>
               </Card>
             </Col>
           </Row>
           <Row type="flex" justify="center">
             <Col className="grid-col">
-              <h4 className="grid-col-title">Exercising</h4>
+              <h4 className="grid-col-title">Language learning settings</h4>
               <Card className="grid-card">
                 <ExerciseOptions />
               </Card>
@@ -161,7 +187,7 @@ class Options extends React.Component {
             </Col>
           </Row>
         </Content>
-        <Footer style={{ textAlign: 'center' }}>University of Groningen © 2019</Footer>
+        <Footer style={{ textAlign: 'center' }}>IT University of Copenhagen © 2020</Footer>
       </Layout>
     );
   }

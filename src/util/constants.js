@@ -11,8 +11,8 @@ export const defaultExerciseSites = [
   },
   {
     "hostname": "www.zeeguu.org",
-    "href": "https://www.zeeguu.org/practice/#!/practice/plan/0",
-    "pathname": "//practice/#!/practice/plan/0",
+    "href": "http://zeeguu.org/aiki",
+    "pathname": "/",
     "regex": "*://*.www.zeeguu.org/*",
     "tld": "org",
     "domain": "zeeguu",
@@ -24,10 +24,18 @@ export const defaultExerciseSites = [
 
 export const defaultExerciseSite = defaultExerciseSites[1];
 
-export const defaultexerciseDuration = 1 * 60 * 1000; // 5 minutes
+export const defaultexerciseDuration = 1 * 10 * 1000; // 10 seconds
 
 export const defaultTimeout = 5 * 60 * 1000; // 5 minutes
 
-export const defaultTimeoutInterval = 5 * 60 * 1000; // 5 minute- increments
+export const defaultTimeoutInterval = 30 * 60 * 1000; // 30 minute- increments
 
 export const s2 = 'https://www.google.com/s2/favicons?domain=';
+
+export const defaultColors = 
+                      ['#FF0000', '#00FF00','#0000FF', 
+                      '#800000', '#4B0082', '#800080', 
+                      '#FFFF00', '#00FFFF', '#FF00FF', 
+                      '#C0C0C0', '#808080', '#800000', 
+                      '#808000', '#008000', '#800080',
+                      '#008080', '#000080', '#fff8dc'];

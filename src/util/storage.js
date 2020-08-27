@@ -2,8 +2,7 @@ import firebase from "./fire";
 
 /* global chrome */
 let listeners = [];
-let study = "testRun";
-let uId = "2";
+let historicalData = "CaseStudy"
 
 export function getFromStorage(...keys) {
     return new Promise(resolve => {
@@ -28,11 +27,19 @@ export function getFromStorage(...keys) {
     });
 }
 
-export function setInStorage(items) {
-        return new Promise(resolve => {
-        if (!items) return resolve();
+export const addStorageListener = callback => {
+    if (window.chrome && chrome.storage) {
+        chrome.storage.onChanged.addListener(callback);
+    } else {
+        listeners.push(callback);
+        window.addEventListener('storage', callback); // only for external tab
+    }
+};
 
-        //Datastructure is a map
+export function setInStorage(items) {
+    return new Promise(async resolve => {
+        if (!items) return resolve();
+        
         if (window.chrome && chrome.storage) {
             chrome.storage.sync.set(items, () => {
                 resolve();
@@ -53,76 +60,32 @@ export function setInStorage(items) {
     });
 }
 
-export const addStorageListener = callback => {
-    if (window.chrome && chrome.storage) {
-        chrome.storage.onChanged.addListener(callback);
-    } else {
-        listeners.push(callback);
-        window.addEventListener('storage', callback); // only for external tab
-    }
-};
+export async function setInFirebase(items) {
+    if(!items) return;
 
-export function setFirebaseData(items) {
-    return new Promise(async resolve => {
-        if(!items) return resolve();
+    chrome.storage.sync.get(['userid', 'firstRun'], async res => {
+        var first = res.firstRun;
+        var uId = res.userid;
 
-        Object.keys(items).forEach( async key => {
-            await firebase.firestore().collection(study).doc(uId).update({
-                [key]: items[key]
-            });
-        })
-        resolve();
-    })
+        if(first){
+            firstTimeRunStorage(uId);
+            chrome.storage.sync.set({'firstRun': false})
+        }
+        
+        let timeStamp = [new Date().getTime()];
+
+        timeStamp.push(items);
+
+        await firebase.firestore().collection(historicalData).doc(uId).update({
+            [timeStamp[0]]: timeStamp[1]
+        });
+    });    
 }
 
-export function firstTimeRunStorage(userId) {
-    uId = userId;
+export function firstTimeRunStorage(UUID) {
     return new Promise(async resolve => {
-            await firebase.firestore().collection(study).doc(uId).set({
-                "enabled": ""
+            await firebase.firestore().collection(historicalData).doc(UUID).set({
             }).catch(console.error);
             resolve();
     });
 }
-
-//      firebase.firestore.FieldValue.arrayUnion() -- Adding to an array
-//      firebase.firestore.FieldValue.arrayRemove() -- Removing from an array
-/*
-    await firebase.firestore().collection("test3").doc("2").set({
-        "newfield":[2],
-        "time":5
-    }).catch(console.error); 
-    
-    
-    
-    const fecthData = async () => {
-            const db = firebase.firestore()
-            const snapshot = await db.collection("test").get().catch(console.error);
-            if(!snapshot) return "no data";
-            const  docs = snapshot.docs;
-            docs.forEach((doc)=>{
-                console.log(doc.data());
-    })
-}
-
-    const data = querySnapshot.docs.map(doc => doc.data());
-                let result = keys.reduce((acc,val) => {
-                    acc[val] = data.acc;
-                    return acc;
-                }, {});
-                console.log(data);
-                resolve(result);
-
-
-    export function getFromFirebase(...keys) {
-    const datas = async resolve =>{
-            await firebase.firestore().collection(study).doc(uId).get().then(querySnapshot => {
-                let result = Object.keys(keys).forEach(key => {
-                    keys[key] = querySnapshot.key;
-                });
-                resolve(result);
-            }).catch(console.error);
-    };
-    return new Promise.all(datas);
-}
-        */
