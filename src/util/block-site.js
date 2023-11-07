@@ -62,7 +62,7 @@ export const blockWebsite = async text => {
     let blocked = urls.filter(notBlocked);
     blockedUrls.push(...blocked);
 
-    await setFirebaseData({ blockedUrls });
+    //await setFirebaseData({ blockedUrls });
     await setInStorage({ blockedUrls });
 
     if (blocked.length > 1) {
